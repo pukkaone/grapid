@@ -1,2 +1,3 @@
 rootProject.name = 'grapid'
 include 'grapid-core'
+include 'grapid-compiler'
