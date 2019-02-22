@@ -1,0 +1,10 @@
+enum Meal {
+  BREAKFAST
+  SECOND_BREAKFAST
+  LUNCH
+  DINNER
+}
+
+extend type Query @tie(service: "MealService") {
+  bestMeal: Meal!
+}

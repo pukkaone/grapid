@@ -1,0 +1,26 @@
+type Offer {
+  price: BigDecimal!
+}
+
+input OfferInput {
+  price: BigDecimal
+}
+
+type Book {
+  id: ID!
+  title: String!
+  offer: Offer!
+}
+
+input BookInput {
+  title: String
+  offer: OfferInput
+}
+
+extend type Mutation @tie(service: "BookService") {
+  createBook(bookInput: BookInput!): Book!
+}
+
+extend type Query @tie(service: "BookService") {
+  book(id: ID!): Book
+}

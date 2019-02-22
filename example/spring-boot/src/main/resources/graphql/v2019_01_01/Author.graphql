@@ -1,0 +1,12 @@
+type Author {
+  id: ID!
+  name: String!
+}
+
+extend type Mutation @tie(service: "AuthorService") {
+  createAuthor(name: String!): Author!
+}
+
+extend type Query @tie(service: "AuthorService") {
+  author(id: ID!): Author
+}
