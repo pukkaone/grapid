@@ -1,0 +1,12 @@
+enum Meal {
+  BREAKFAST
+  SECOND_BREAKFAST
+  LUNCH
+  DINNER
+}
+
+extend type Query @tie(service: "EnumService") {
+  bestMeal: Meal!
+  echoEnum(value: Meal!): Meal!
+  echoListEnum(value: [Meal]!): [Meal]!
+}

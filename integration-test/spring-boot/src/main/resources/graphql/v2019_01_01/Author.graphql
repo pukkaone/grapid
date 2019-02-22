@@ -1,0 +1,21 @@
+type Author {
+  id: ID!
+  name: String!
+  book(id: ID!): Book
+  books: [Book]!
+      @argument(name: "authorId", value: "((Author) environment.getSource()).getId()")
+}
+
+input AuthorInput {
+  name: String
+}
+
+extend type Mutation @tie(service: "AuthorService") {
+  createAuthor(authorInput: AuthorInput!): Author!
+  createAuthors(authorInputs: [AuthorInput]!): [Author]!
+}
+
+extend type Query @tie(service: "AuthorService") {
+  echoNullableAuthor(authorInput: AuthorInput): Author
+  echoNullableListAuthor(authorInputs: [AuthorInput]): [Author]!
+}

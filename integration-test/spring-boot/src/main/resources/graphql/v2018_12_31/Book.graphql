@@ -1,0 +1,15 @@
+type Book {
+  id: ID!
+  title: String!
+  price: BigDecimal!
+}
+
+input BookInput {
+  title: String
+  price: BigDecimal
+}
+
+extend type Mutation @tie(service: "BookService") {
+  createBook(bookInput: BookInput!): Book!
+  createBooks(bookInputs: [BookInput]!): [Book]!
+}

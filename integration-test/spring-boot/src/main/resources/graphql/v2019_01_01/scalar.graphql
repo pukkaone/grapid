@@ -1,0 +1,32 @@
+extend type Query @tie(service: "ScalarService") {
+  echoBigDecimal(value: BigDecimal!): BigDecimal!
+  echoBigInteger(value: BigInteger!): BigInteger!
+  echoBoolean(value: Boolean!): Boolean!
+  echoChar(value: Char!): Char!
+  echoFloat(value: Float!): Float!
+  echoID(value: ID!): ID!
+  echoInstant(value: Instant!): Instant!
+  echoInt(value: Int!): Int!
+  echoNullableInt(value: Int): Int
+  echoLocalDate(value: LocalDate!): LocalDate!
+  echoLocalDateTime(value: LocalDateTime!): LocalDateTime!
+  echoLocalTime(value: LocalTime!): LocalTime!
+  echoLong(value: Long!): Long!
+  echoShort(value: Short!): Short!
+  echoString(value: String!): String!
+
+  echoListBigDecimal(value: [BigDecimal]!): [BigDecimal]!
+  echoListBigInteger(value: [BigInteger]!): [BigInteger]!
+  echoListBoolean(value: [Boolean]!): [Boolean]!
+  echoListChar(value: [Char]!): [Char]!
+  echoListFloat(value: [Float]!): [Float]!
+  echoListID(value: [ID]!): [ID]!
+  echoListInstant(value: [Instant]!): [Instant]!
+  echoListInt(value: [Int]!): [Int]!
+  echoListLocalDate(value: [LocalDate]!): [LocalDate]!
+  echoListLocalDateTime(value: [LocalDateTime]!): [LocalDateTime]!
+  echoListLocalTime(value: [LocalTime]!): [LocalTime]!
+  echoListLong(value: [Long]!): [Long]!
+  echoListShort(value: [Short]!): [Short]!
+  echoListString(value: [String]!): [String]!
+}

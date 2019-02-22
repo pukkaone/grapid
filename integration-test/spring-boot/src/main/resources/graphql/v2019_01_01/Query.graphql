@@ -1,0 +1,12 @@
+type Change {
+  description: String!
+}
+
+type Version {
+  version: String!
+  changes: [Change]!
+}
+
+type Query {
+  versions: [Version]!
+}
