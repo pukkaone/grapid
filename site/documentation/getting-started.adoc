@@ -1,0 +1,576 @@
+== Getting Started Guide
+
+This tutorial explains how to implement a GraphQL server in a Spring Boot application.
+
+[NOTE]
+====
+Prerequisites are:
+
+  - Java 11
+  - Maven
+  - Maven project building a Spring Boot 2.1 application
+====
+
+
+=== Query
+
+Add this Spring Boot starter which auto-configures a GraphQL server accepting requests by HTTP.
+By default, the server URL path is `/graphql` relative to the context path.
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+  <groupId>com.github.pukkaone</groupId>
+  <artifactId>grapid-web-spring-boot-starter</artifactId>
+  <version>{revnumber}</version>
+</dependency>
+----
+
+The framework also requires this other Spring Boot starter in the Maven project.
+
+[source,xml]
+----
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+----
+
+Add this Maven plugin which runs a compiler to translate GraphQL schema definition files to Java
+source files.
+
+[source,xml,subs="verbatim,attributes"]
+----
+<plugin>
+  <groupId>com.github.pukkaone</groupId>
+  <artifactId>grapid-maven-plugin</artifactId>
+  <version>{revnumber}</version>
+  <configuration>
+    <packagePrefix>com.example.graphql</packagePrefix>
+  </configuration>
+  <executions>
+    <execution>
+      <goals>
+        <goal>compile</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>
+----
+
+.API version
+****
+An API version represents a set of types and operations defined by a GraphQL schema.
+A version identifier must be a valid Java identifier and not a Java keyword.
+****
+
+[NOTE]
+You can choose the version identifier to be anything within these restrictions.
+In this example, the version identifier follows a convention encoding a year, month, and day.
+
+Given a _version_ identifying an API version, the framework derives these names by convention.
+
+[cols="d,2d,2d"]
+|===
+| Concept | Value | Description
+
+| Resources directory
+| `src/main/resources/graphql/_version_/`
+| directory containing GraphQL schema definition files for the version
+
+| Java package
+| `_packagePrefix_`
+| The compiler generates Java classes applicable to all versions in this Java package.
+
+| Java package
+| `_packagePrefix_._version_`
+| The compiler generates Java classes for the version under this Java package.
+
+| URL path
+| `/graphql/_version_`
+| The GraphQL server receives requests for the version on this URL path.
+|===
+
+This example defines the version `v2018_12_31`.
+Create the resources directory `src/main/resources/graphql/v2018_12_31/`.
+The compiler generates the code for this version to Java package `com.example.graphql.v2018_12_31`.
+
+Add this GraphQL schema definition file in the version directory.
+
+[NOTE]
+By convention, GraphQL schema definition file names end with the extension `.graphql`.
+
+.schema.graphql
+[source,graphql]
+----
+type Author {
+  id: ID!
+  name: String!
+}
+
+type Book {
+  id: ID!
+  title: String!
+  price: BigDecimal!
+}
+
+type Query {
+  author(id: ID!): Author
+  book(id: ID!): Book
+}
+----
+
+The compiler translates the object types Author and Book to simple Java data classes (also known as
+a Plain Old Java Object or the acronym POJO), which only hold property values and don't themselves
+perform any operations on those properties.
+
+The GraphQL schema defines the root object type Query.
+The compiler appends the suffix `Service` to this root object type name to derive the Java class
+name QueryService.
+The compiler assumes there is a Java class named QueryService having methods and method parameters
+corresponding to the Query field and input value definitions.
+It generates code that invokes these methods.
+
+As an application developer, you must implement the QueryService class (and the classes it
+collaborates with to implement its operations).
+By convention, this class is in the Java package configured by the _packagePrefix_ property.
+
+.QueryService.java
+[source,java]
+----
+package com.example.graphql;
+
+import com.example.graphql.v2018_12_31.type.Author; // <1>
+import com.example.graphql.v2018_12_31.type.Book;
+import com.example.repository.AuthorRepository;
+import com.example.repository.BookRepository;
+import org.springframework.stereotype.Service;
+
+@Service
+public class QueryService {
+
+  @Autowired
+  private AuthorRepository authorRepository;
+
+  @Autowired
+  private BookRepository bookRepository;
+
+  public Author author(String id) { // <2>
+    return authorRepository.findById(id);
+  }
+
+  public Book book(String id) { // <3>
+    return bookRepository.findById(id);
+  }
+}
+----
+<1> The compiler generated the simple Java data class Author from the GraphQL object type Author.
+<2> The compiler translated this Java method signature from the field `author` of the GraphQL
+    root object type Query.
+<3> The compiler translated this Java method signature from the field `book` of the GraphQL
+    root object type Query.
+
+Run the application. In https://github.com/prisma/graphql-playground[GraphQL Playground],
+connect to `http://localhost:8080/graphql/v2018_12_31` to send a GraphQL query to the server.
+
+
+=== Mutation
+
+Add a mutation to the GraphQL schema.
+
+.schema.graphql
+[source,graphql]
+----
+type Author {
+  id: ID!
+  name: String!
+}
+
+type Book {
+  id: ID!
+  title: String!
+  price: BigDecimal!
+}
+
+type BookInput { # <1>
+  title: String
+  price: BigDecimal
+}
+
+type Mutation { # <2>
+  createBook(bookInput: BookInput!): Book!
+}
+
+type Query {
+  author(id: ID!): Author
+  book(id: ID!): Book
+}
+----
+<1> Add input type BookInput.
+<2> Add root object type Mutation.
+
+The compiler assumes there is a Java class named MutationService having methods and method
+parameters corresponding to the Mutation field and input value definitions.
+It generates code that invokes these methods.
+
+As an application developer, you must implement the MutationService class.
+
+.MutationService.java
+[source,java]
+----
+package com.example.graphql;
+
+import com.example.graphql.v2018_12_31.type.Book;
+import com.example.graphql.v2018_12_31.type.BookInput; // <1>
+import com.example.repository.BookRepository;
+import org.springframework.stereotype.Service;
+
+@Service
+public class MutationService {
+
+  @Autowired
+  private BookRepository bookRepository;
+
+  public Book createBook(BookInput bookInput) { // <2>
+    return bookRepository.createBook(bookInput.getTitle(), bookInput.getPrice());
+  }
+}
+----
+<1> The compiler generated the simple Java data class BookInput from the GraphQL input type
+    BookInput.
+<2> The compiler translated this Java method signature from the field `createBook` of the GraphQL
+    root object type Mutation.
+
+
+=== Field
+
+In the GraphQL conceptual model, a field is a function which yields a value.
+(Some GraphQL server implementations call these functions _resolvers_.)
+The framework implements two ways to yield a value.
+If a field does not have any arguments, then the framework reads a similarly-named property of a
+simple Java data object.
+If a field has one or more arguments, then the framework invokes a method of a Java service class,
+passing the arguments to the method parameters.
+
+Suppose the GraphQL object type Author defines a field `books` which is intended to provide all
+books written by the author.
+
+[source,graphql]
+----
+type Author {
+  id: ID!
+  name: String!
+  books: [Book]!
+}
+----
+
+The framework will try to read the property `books` of the simple Java data class Author.
+To invoke a method of a Java service class instead, add a custom directive to the field.
+
+[source,graphql]
+----
+type Author {
+  id: ID!
+  name: String!
+  books: [Book]!
+      @argument(name = "authorId", value = "((Author) environment.getSource()).getId()"
+}
+----
+
+The `@argument` directive invokes a Java method with an additional argument.
+The argument value is a Java language expression.
+In the example expression, `environment` is an instance of
+https://static.javadoc.io/com.graphql-java/graphql-java/12.0/graphql/schema/DataFetchingEnvironment.html[DataFetchingEnvironment].
+
+Add the method to be invoked to the QueryService class.
+
+[source,java]
+----
+  public List<Book> books(String authorId) {
+    return bookRepository.findByAuthorId(authorId);
+  }
+----
+
+
+=== Modularize GraphQL Schema
+
+As the complexity of the GraphQL schema grows, you will want to organize the types and operations
+into multiple schema definition files.
+The framework merges multiple files in a version directory into a single GraphQL schema.
+
+As you add operations to the GraphQL root object types, the number of methods you need to maintain
+in the MutationService class and QueryService class may become unwieldly.
+Instead of making these two service classes responsible for all your business logic, you can
+organize the methods into other Java service classes.
+
+Delete the schema.graphql file.
+Other files will replace it.
+
+Define the GraphQL root object type Mutation with no fields.
+You're going to extend this type, and type extensions are only allowed on already defined types.
+
+.Mutation.graphql
+[source,graphql]
+----
+type Mutation {
+}
+----
+
+Define the GraphQL root object type Query with no fields.
+
+.Query.graphql
+[source,graphql]
+----
+type Query {
+}
+----
+
+Extend GraphQL root object type Query with author operations.
+A custom directive ties the fields defined in the object type extension to methods of Java class
+AuthorService.
+As an application developer, you must implement the AuthorService class.
+
+.Author.graphql
+[source,graphql]
+----
+type Author {
+  id: ID!
+  name: String!
+}
+
+extend type Query @tie(service: "AuthorService") {
+  author(id: ID!): Author
+}
+----
+
+Similarly extend Mutation and Query with book operations, and tie them to methods of Java class
+BookService.
+
+.Book.graphql
+[source,graphql]
+----
+type Book {
+  id: ID!
+  title: String!
+  price: BigDecimal!
+}
+
+type BookInput {
+  title: String
+  price: BigDecimal
+}
+
+extend type Mutation @tie(service: "BookService") {
+  createBook(bookInput: BookInput!): Book!
+}
+
+extend type Query @tie(service: "BookService") {
+  book(id: ID!): Book
+}
+----
+
+
+=== API Versioning
+
+Ideally, you want your server to implement a single API version which stays backward compatible.
+In general, these guidelines help you avoid making breaking changes to your API:
+
+  - Only add new fields.
+  - Never delete or alter existing fields.
+
+There may come a time when an incompatible change is required.
+At that time, create a new API version implementing the incompatible change.
+The server handles requests to old and new API versions.
+Service classes only handle requests in the newest API version.
+The framework transforms requests and responses for older API versions into representations the
+service classes can handle.
+
+API versions are sorted from oldest to newest by comparing the version identifier.
+Numbers in versions are compared numerically.
+For example, version `v2` is older than `v11`, which would not be the case if they are compared
+lexicographically.
+
+
+==== Object Type Change
+
+For example, let's add a new API version, v2019_01_01, which introduces an incompatible change.
+The new API version moves the field price from object type Book to a nested object.
+Clients will send requests to the new API version at URL path `/graphql/v2019_01_01`.
+
+Copy resources directory `src/main/resources/graphql/v2018_12_31/`
+to `src/main/resources/graphql/v2019_01_01/`.
+Change the Book definition in the new API version.
+
+.v2019_01_01/Book.graphql
+[source,graphql]
+----
+type Offer {
+  price: BigDecimal! # <1>
+}
+
+type Book {
+  id: ID!
+  title: String!
+  offer: Offer!
+}
+----
+<1> In the previous API version, price is a field of object type Book.
+
+Add a Java class describing the API change and how to transform an object type from the new
+API version to a representation acceptable to a client of the previous API version.
+
+.BookPriceChange.java
+[source,java]
+----
+package com.example.graphql.v2019_01_01; // <1>
+
+import com.example.graphql.v2019_01_01.type.Book;
+import com.github.pukkaone.grapid.core.apichange.ObjectTypeChange;
+import org.springframework.stereotype.Component;
+
+@Component
+public class BookPriceChange
+    extends ObjectTypeChange<Book, com.example.graphql.v2018_12_31.type.Book> {
+
+  public BookPriceChange() {
+    super("In object type Book, field price moved to field of nested object offer.");
+  }
+
+  @Override
+  public void downgrade(Book source, com.example.graphql.v2018_12_31.type.Book target) {
+    target.setPrice(source.getOffer().getPrice());
+    target.removeField("offer");
+  }
+}
+----
+<1> By convention, the Java package corresponds to the API version introducing the change.
+
+You must also change the service classes to use the Java classses generated from new API version.
+
+
+==== Input Type Change
+
+Change the input type BookInput by moving the field price to a nested input.
+
+.v2019_01_01/Book.graphql
+[source,graphql]
+----
+type OfferInput {
+  price: BigDecimal! # <1>
+}
+
+type BookInput {
+  title: String
+  offer: OfferInput
+}
+----
+<1> In the previous API version, price is a field of input type BookInput.
+
+Add a Java class describing the API change and how to transform an input type from the previous
+API version to the new API version.
+
+.BookInputPriceChange.java
+[source,java]
+----
+package com.example.graphql.v2019_01_01;
+
+import com.example.graphql.v2019_01_01.type.BookInput;
+import com.example.graphql.v2019_01_01.type.OfferInput;
+import com.github.pukkaone.grapid.core.apichange.InputTypeChange;
+import org.springframework.stereotype.Component;
+
+@Component
+public class BookInputPriceChange
+    extends InputTypeChange<com.example.graphql.v2018_12_31.type.BookInput, BookInput> {
+
+  public BookInputPriceChange() {
+    super("In input type BookInput, field price moved to field of nested input offer.");
+  }
+
+  @Override
+  public void upgrade(com.example.graphql.v2018_12_31.type.BookInput source, BookInput target) {
+    OfferInput offer = new OfferInput();
+    offer.setPrice(source.getPrice());
+
+    target.setOffer(offer);
+    target.removeField("price");
+  }
+}
+----
+
+
+==== Enum Type Change
+
+Suppose the previous API version defines an enum type.
+
+[source,graphql]
+----
+enum Meal {
+  BREAKFAST
+  LUNCH
+  DINNER
+}
+----
+
+The new API version adds an enum value.
+
+[source,graphql]
+----
+enum Meal {
+  BREAKFAST
+  SECOND_BREAKFAST # <1>
+  LUNCH
+  DINNER
+}
+----
+<1> The new API version adds this enum value.
+
+Old clients will not understand the new enum value, so transform the new enum value to an enum value
+acceptable to old clients.
+
+.MealSecondBreakfastChange.java
+[source,java]
+----
+package com.example.graphql.v2019_01_01;
+
+import com.example.graphql.v2019_01_01.type.Meal;
+import com.github.pukkaone.grapid.core.apichange.EnumTypeChange;
+
+public class MealSecondBreakfastChange
+    extends EnumTypeChange<com.example.graphql.v2018_12_31.type.Meal, Meal> {
+
+  public MealSecondBreakfastChange() {
+    super("Added enum value SECOND_BREAKFAST to enum type Meal.");
+  }
+
+  @Override
+  public String downgrade(String enumValueName) {
+    return enumValueName.equals(Meal.SECOND_BREAKFAST.name())
+        ? Meal.BREAKFAST.name() : enumValueName;
+  }
+}
+----
+
+
+==== Side Effect
+
+Sometimes a new API version introduces a change in the application's behavior.
+The application logic is different depending on the API version of the request being processed.
+
+Inject a RequestVersion instance and the change instance.
+
+[source,java]
+----
+@Autowired
+private RequestVersion requestVersion;
+
+@Autowired
+private MealSecondBreakChange mealSecondBreakfastChange;
+----
+
+The application code checks if the change is active for the current request being processed.
+
+[source,java]
+----
+if (requestVersion.isActive(mealSecondBreakfastChange)) {
+----

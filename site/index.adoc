@@ -1,0 +1,29 @@
+= Build GraphQL Servers Fast
+:page-layout: home
+
+
+=== How It Works
+
+.1. Define GraphQL schema.
+[source,graphql]
+----
+type Query {
+  greet(name: String!): String!
+}
+----
+
+.2. Write Java application code.
+[source,java]
+----
+@Service
+public class QueryService {
+  public String greet(String name) {
+    return "Hello " + name;
+  }
+}
+----
+
+.3. Build and run.
+----
+mvn spring-boot:run
+----

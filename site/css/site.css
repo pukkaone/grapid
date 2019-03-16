@@ -1,0 +1,40 @@
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+body, h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family);
+}
+
+.jumbotron {
+  background: url("../images/background.jpg") no-repeat;
+  background-size: cover;
+  padding-bottom: 20px;
+  text-shadow: 1px 1px #000;
+}
+
+.jumbotron, .jumbotron h1 small {
+  color: #fff;
+}
+
+.jumbotron address {
+  color: #040;
+  font-size: 80%;
+  margin-bottom: 0;
+  padding: 0;
+  text-align: right;
+  text-shadow: none;
+}
+
+.jumbotron address a {
+  color: #040;
+  text-decoration: underline;
+}
+
+.title {
+  font-family: var(--font-family) !important;
+}
+
+#toctitle {
+  display: block;
+}

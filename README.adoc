@@ -1,0 +1,117 @@
+= Grapid: Build GraphQL Servers Fast {nbsp}image:https://maven-badges.herokuapp.com/maven-central/com.github.pukkaone/grapid-core/badge.svg[Maven Central,link="https://maven-badges.herokuapp.com/maven-central/com.github.pukkaone/grapid-core"]
+
+Grapid is a schema-first framework for implementing GraphQL servers in Java.  As an application
+developer, you only need to implement the business logic for your API.  The framework translates
+GraphQL schemas to the code necessary for processing GraphQL requests, such as converting between
+GraphQL types and Java types.
+
+
+== GraphQL Server Quick Start Guide
+
+Add this Spring Boot starter which auto-configures a GraphQL server accepting requests by HTTP.
+By default, the server URL path is `/graphql` relative to the context path.
+
+[source,xml]
+----
+<dependency>
+  <groupId>com.github.pukkaone</groupId>
+  <artifactId>grapid-web-spring-boot-starter</artifactId>
+  <version>${grapid.version}</version>
+</dependency>
+----
+
+The framework also requires this other Spring Boot starter in the Maven project.
+
+[source,xml]
+----
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+----
+
+Add this Maven plugin which runs a compiler to translate GraphQL schema definition files to Java
+source files.
+
+[source,xml]
+----
+<plugin>
+  <groupId>com.github.pukkaone</groupId>
+  <artifactId>grapid-maven-plugin</artifactId>
+  <version>${grapid.version}</version>
+  <configuration>
+    <!-- The compiler generates Java classes under this Java package. -->
+    <packagePrefix>com.example.graphql</packagePrefix>
+  </configuration>
+  <executions>
+    <execution>
+      <goals>
+        <goal>compile</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>
+----
+
+An API version represents a set of types and operations defined by a GraphQL schema.  A version
+identifier must be a valid Java identifier and not a Java keyword.
+
+By convention, GraphQL schema definition files are located under a resources directory
+`src/main/resources/graphql/_version_/` where _version_ identifies an API version.  Create the
+resources directory `src/main/resources/graphql/v2018_12_31/`.  Add this GraphQL schema definition
+file in the directory.  By convention, GraphQL schema definition file names have the extension
+`.graphql`.
+
+.Author.graphql
+[source,graphql]
+----
+type Author {
+  id: ID!
+  name: String!
+}
+
+type Query {
+  author(id: ID!): Author
+}
+----
+
+The Java package name where the compiler generates the code for a version is the concatenation of
+the package prefix configured in the plugin with the version identifier.  In this example, the
+compiler generates code to Java package `com.example.graphql.v2018_12_31`.
+
+Based on the GraphQL root object type name, the compiler assumes there is a Java class named
+QueryService.  As an application developer, you must implement the QueryService class.
+
+.QueryService.java
+[source,java]
+----
+package com.example.graphql.v2018_12_31;
+
+import com.example.graphql.v2018_12_31.type.Author; // <1>
+import org.springframework.stereotype.Service;
+
+@Service
+public class QueryService {
+
+  public Author author(String id) { // <2>
+    var author = new Author();
+    author.setId("AUTHOR-1");
+    author.setName("NAME");
+    return author;
+  }
+}
+----
+<1> The compiler generated the simple Java data class Author from the GraphQL object type Author.
+<2> The compiler translated this Java method signature from the field `author` of the GraphQL
+    root object type Query.
+
+Run the application.  In https://github.com/prisma/graphql-playground[GraphQL Playground],
+connect to `http://localhost:8080/graphql/v2018_12_31` to send a GraphQL query to the server.
+
+For more details, see the https://pukkaone.github.io/grapid/documentation/[Getting Started Guide].
+
+
+== Interface Stability
+
+Version 0.x.x interfaces are unstable::
+  Releases within major version 0 may have incompatible changes.
