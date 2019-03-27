@@ -61,7 +61,7 @@ subprojects {
   jar {
     manifest {
       attributes(
-          'Automatic-Module-Name': "${project.group}.grapid.${project.name}".replace('-', '.'),
+          'Automatic-Module-Name': "${project.group}.${project.name}".replace('-', '.'),
           'Implementation-Version': project.version)
     }
   }
@@ -99,13 +99,12 @@ subprojects {
 
         pom.project {
           name project.name
-          description project.description
           url 'https://github.com/pukkaone/grapid'
 
           licenses {
             license {
               name 'Apache License, Version 2.0'
-              url 'http://www.apache.org/licenses/LICENSE-2.0'
+              url 'https://www.apache.org/licenses/LICENSE-2.0'
               distribution 'repo'
             }
           }
@@ -124,6 +123,12 @@ subprojects {
           }
         }
       }
+    }
+  }
+
+  afterEvaluate { project ->
+    uploadArchives.repositories.mavenDeployer.pom.project {
+      description project.description
     }
   }
 }
