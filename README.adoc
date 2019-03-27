@@ -30,8 +30,7 @@ The framework also requires this other Spring Boot starter in the Maven project.
 </dependency>
 ----
 
-Add this Maven plugin which runs a compiler to translate GraphQL schema definition files to Java
-source files.
+Add this Maven plugin which compiles GraphQL schema definition files to Java source files.
 
 [source,xml]
 ----

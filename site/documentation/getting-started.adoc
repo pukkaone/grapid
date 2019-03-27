@@ -387,8 +387,8 @@ service classes can handle.
 
 API versions are sorted from oldest to newest by comparing the version identifier.
 Numbers in versions are compared numerically.
-For example, version `v2` is older than `v11`, which would not be the case if they are compared
-lexicographically.
+For example, version `v2` is older than `v11`, but they would be sorted in the opposite direction if
+compared lexicographically.
 
 
 ==== Object Type Change

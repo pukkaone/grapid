@@ -2,7 +2,7 @@
 :page-layout: home
 
 
-=== How It Works
+== How It Works
 
 .1. Define GraphQL schema.
 [source,graphql]

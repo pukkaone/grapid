@@ -13,22 +13,22 @@ The framework supports the standard GraphQL scalars and some custom scalars.
 h| Nullable scalar
 h| Non-null scalar
 
-| BigDecimal | BigDecimal | BigDecimal | Arbitrary precision decimal
-| BigInteger | BigInteger | BigInteger | Arbitrary precision integer
-| Boolean | Boolean | boolean |
-| Char | Character | char |
+| BigDecimal | BigDecimal | BigDecimal | arbitrary precision decimal
+| BigInteger | BigInteger | BigInteger | arbitrary precision integer
+| Boolean | Boolean | boolean | boolean
+| Char | Character | char | character
 | Float | Double | double | 64-bit IEEE 754 floating point number
 | ID | String | String | entity identifier
-| Instant | Instant | Instant | Date and time in UTC time zone in format +
+| Instant | Instant | Instant | date and time in UTC time zone in format +
 `yyyy-MM-dd'T'HH:mm:ss.SSS'Z'`
 | Int | Integer | int | 32-bit signed integer
-| LocalDate | LocalDate | LocalDate | Date without time zone in format `yyyy-MM-dd`
-| LocalDateTime | LocalDateTime | LocalDateTime | Date and time without time zone in format +
+| LocalDate | LocalDate | LocalDate | date without time zone in format `yyyy-MM-dd`
+| LocalDateTime | LocalDateTime | LocalDateTime | date and time without time zone in format +
 `yyyy-MM-dd'T'HH:mm:ss`
-| LocalTime | LocalTime | LocalTime | Time without time zone in format `HH:mm:ss`
+| LocalTime | LocalTime | LocalTime | time without time zone in format `HH:mm:ss`
 | Long | Long | long | 64-bit signed integer
 | Short | Short | short | 16-bit signed integer
-| String | String | String |
+| String | String | String | string
 |===
 
 
