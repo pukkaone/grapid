@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Reference :: Grapid</title>
+    <link rel="canonical" href="https://pukkaone.github.io/grapid/documentation/reference/">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <link rel="stylesheet" href="../../_/css/supplemental.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-7747045-3"></script>
+    <script>function gtag(){dataLayer.push(arguments)};window.dataLayer=window.dataLayer||[];gtag('js',new Date());gtag('config','UA-7747045-3')</script>
+  </head>
+  <body class="article">
+<header class="header" role="banner">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://pukkaone.github.io/grapid">Grapid</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://pukkaone.github.io/grapid/documentation/">Documentation</a>
+        <a class="navbar-item" href="https://github.com/pukkaone/grapid">GitHub</a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="documentation" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../">Grapid</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../guide/">Getting Started Guide</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="./">Reference</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Grapid</span>
+    <span class="version">0.6.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Grapid</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../">0.6.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../home/" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../">Grapid</a></li>
+    <li><a href="./">Reference</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/pukkaone/grapid/blob/master/site/documentation/modules/reference/pages/index.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Reference</h1>
+<div class="sect1">
+<h2 id="_scalar_types"><a class="anchor" href="#_scalar_types"></a>Scalar Types</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The framework supports the standard GraphQL scalars and some custom scalars.</p>
+</div>
+<table class="tableblock frame-all grid-rows stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 50.0002%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-left valign-bottom" rowspan="2"><p class="tableblock">GraphQL scalar</p></th>
+<th class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">Java type</p></th>
+<th class="tableblock halign-left valign-bottom" rowspan="2"><p class="tableblock">Description</p></th>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Nullable scalar</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Non-null scalar</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BigDecimal</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BigDecimal</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BigDecimal</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">arbitrary precision decimal</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BigInteger</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BigInteger</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BigInteger</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">arbitrary precision integer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Char</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Character</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>char</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">character</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Float</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Double</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>double</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">64-bit IEEE 754 floating point number</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">entity identifier</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Instant</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Instant</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Instant</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">date and time in UTC time zone in format<br>
+<code>yyyy-MM-dd&#8217;T&#8217;HH:mm:ss.SSS&#8217;Z'</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Int</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Integer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>int</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">32-bit signed integer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">date without time zone in format <code>yyyy-MM-dd</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalDateTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">date and time without time zone in format<br>
+<code>yyyy-MM-dd&#8217;T&#8217;HH:mm:ss</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LocalTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time without time zone in format <code>HH:mm:ss</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Long</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Long</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>long</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">64-bit signed integer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Short</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Short</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>short</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">16-bit signed integer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_list_type"><a class="anchor" href="#_list_type"></a>List Type</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The GraphQL list type is translated to Java type
+<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html">java.util.List</a>.</p>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script src="../../_/js/site.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js"></script>
+<script src="../../_/js/highlightjs-graphql.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function (event) {
+    hljs.registerLanguage('graphql', window.hljsDefineGraphQL);
+    document.querySelectorAll('pre code.hljs').forEach(function (block) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+  </body>
+</html>

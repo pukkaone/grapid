@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Getting Started Guide :: Grapid</title>
+    <link rel="canonical" href="https://pukkaone.github.io/grapid/documentation/guide/">
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <link rel="stylesheet" href="../../_/css/supplemental.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-7747045-3"></script>
+    <script>function gtag(){dataLayer.push(arguments)};window.dataLayer=window.dataLayer||[];gtag('js',new Date());gtag('config','UA-7747045-3')</script>
+  </head>
+  <body class="article">
+<header class="header" role="banner">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://pukkaone.github.io/grapid">Grapid</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://pukkaone.github.io/grapid/documentation/">Documentation</a>
+        <a class="navbar-item" href="https://github.com/pukkaone/grapid">GitHub</a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="documentation" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../">Grapid</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="./">Getting Started Guide</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../reference/">Reference</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Grapid</span>
+    <span class="version">0.5.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Grapid</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../">0.5.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../home/" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../">Grapid</a></li>
+    <li><a href="./">Getting Started Guide</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/pukkaone/grapid/blob/master/site/documentation/modules/guide/pages/index.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Getting Started Guide</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This tutorial explains how to implement a GraphQL server in a Spring Boot application.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Prerequisites are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Java 11</p>
+</li>
+<li>
+<p>Maven</p>
+</li>
+<li>
+<p>Maven project building a Spring Boot 2.3 application</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_query"><a class="anchor" href="#_query"></a>Query</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Add this Spring Boot starter which auto-configures a GraphQL server accepting requests by HTTP.
+By default, the server URL path is <code>/graphql</code> relative to the context path.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+  &lt;groupId&gt;com.github.pukkaone&lt;/groupId&gt;
+  &lt;artifactId&gt;grapid-web-spring-boot-starter&lt;/artifactId&gt;
+  &lt;version&gt;0.5.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add this Maven plugin which runs a compiler to translate GraphQL schema definition files to Java
+source files.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;plugin&gt;
+  &lt;groupId&gt;com.github.pukkaone&lt;/groupId&gt;
+  &lt;artifactId&gt;grapid-maven-plugin&lt;/artifactId&gt;
+  &lt;version&gt;0.5.0&lt;/version&gt;
+  &lt;configuration&gt;
+    &lt;packagePrefix&gt;com.example.graphql&lt;/packagePrefix&gt;
+  &lt;/configuration&gt;
+  &lt;executions&gt;
+    &lt;execution&gt;
+      &lt;goals&gt;
+        &lt;goal&gt;compile&lt;/goal&gt;
+      &lt;/goals&gt;
+    &lt;/execution&gt;
+  &lt;/executions&gt;
+&lt;/plugin&gt;</code></pre>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">API version</div>
+<div class="paragraph">
+<p>An API version represents a set of types and operations defined by a GraphQL schema.
+A version identifier must be a valid Java identifier and not a Java keyword.</p>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You can choose the version identifier to be anything within these restrictions.
+In this example, the version identifier follows a convention encoding a year, month, and day.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Given a <em>version</em> identifying an API version, and the <em>packagePrefix</em> property configured in the
+Maven plugin, the framework derives these names by convention.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Concept</th>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Resources directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/main/resources/graphql/</code><em>version</em><code>/</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">You put GraphQL schema definition files for the version in this directory.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Java package</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>packagePrefix</em><code>.resolver</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">You put Java classes defining methods to yield field values in this Java package.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Java package</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>packagePrefix</em><code>.</code><em>version</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The compiler generates Java classes for the version under this Java package.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">URL path</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/graphql/</code><em>version</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The GraphQL server receives requests for the version on this URL path.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>This example defines the version <code>v2018_12_31</code>.
+Create the resources directory <code>src/main/resources/graphql/v2018_12_31/</code>.
+The compiler generates the code for this version to Java package <code>com.example.graphql.v2018_12_31</code>.</p>
+</div>
+<div class="paragraph">
+<p>Add this GraphQL schema definition file in the version directory.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+By convention, GraphQL schema definition file names end with the extension <code>.graphql</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">schema.graphql</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-graphql hljs" data-lang="graphql">type Author {
+  id: ID!
+  name: String!
+}
+
+type Book {
+  id: ID!
+  title: String!
+  price: BigDecimal!
+}
+
+type Query {
+  author(id: ID!): Author
+  book(id: ID!): Book
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The compiler translates the object types Author and Book to simple Java data classes (also known as
+a Plain Old Java Object or the acronym POJO), which only hold property values and don&#8217;t themselves
+perform any operations on those properties.</p>
+</div>
+<div class="paragraph">
+<p>The GraphQL schema defines the root object type Query.
+The compiler appends the suffix <code>Resolver</code> to this root object type name to derive the Java class
+name QueryResolver.
+The compiler assumes there is a Java class named QueryResolver having methods and method parameters
+corresponding to the Query field and input value definitions.
+It generates code that invokes these methods.</p>
+</div>
+<div class="paragraph">
+<p>As an application developer, you must implement the QueryResolver class (and the classes it
+collaborates with to implement its operations).
+By convention, this class is in the Java package named <em>packagePrefix</em><code>.resolver</code>.</p>
+</div>
+<div class="listingblock">
+<div class="title">QueryResolver.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example.graphql.resolver;
+
+import com.example.graphql.v2018_12_31.type.Author; <i class="conum" data-value="1"></i><b>(1)</b>
+import com.example.graphql.v2018_12_31.type.Book;
+import com.example.repository.AuthorRepository;
+import com.example.repository.BookRepository;
+import org.springframework.stereotype.Component;
+
+@Component
+public class QueryResolver {
+
+  @Autowired
+  private AuthorRepository authorRepository;
+
+  @Autowired
+  private BookRepository bookRepository;
+
+  public Author author(String id) { <i class="conum" data-value="2"></i><b>(2)</b>
+    return authorRepository.findById(id);
+  }
+
+  public Book book(String id) { <i class="conum" data-value="3"></i><b>(3)</b>
+    return bookRepository.findById(id);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The compiler generated the simple Java data class Author from the GraphQL object type Author.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The compiler translated this Java method signature from the field <code>author</code> of the GraphQL
+root object type Query.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The compiler translated this Java method signature from the field <code>book</code> of the GraphQL
+root object type Query.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Run the application. In <a href="https://github.com/prisma/graphql-playground">GraphQL Playground</a>,
+connect to <code><a href="http://localhost:8080/graphql/v2018_12_31" class="bare">http://localhost:8080/graphql/v2018_12_31</a></code> to send a GraphQL query to the server.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_mutation"><a class="anchor" href="#_mutation"></a>Mutation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Add a mutation to the GraphQL schema.</p>
+</div>
+<div class="listingblock">
+<div class="title">schema.graphql</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-graphql hljs" data-lang="graphql">type Author {
+  id: ID!
+  name: String!
+}
+
+type Book {
+  id: ID!
+  title: String!
+  price: BigDecimal!
+}
+
+type BookInput { <i class="conum" data-value="1"></i><b>(1)</b>
+  title: String
+  price: BigDecimal
+}
+
+type Mutation { <i class="conum" data-value="2"></i><b>(2)</b>
+  createBook(bookInput: BookInput!): Book!
+}
+
+type Query {
+  author(id: ID!): Author
+  book(id: ID!): Book
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Add input type BookInput.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Add root object type Mutation.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The compiler assumes there is a Java class named MutationResolver having methods and method
+parameters corresponding to the Mutation field and input value definitions.
+It generates code that invokes these methods.</p>
+</div>
+<div class="paragraph">
+<p>As an application developer, you must implement the MutationResolver class.</p>
+</div>
+<div class="listingblock">
+<div class="title">MutationResolver.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example.graphql.resolver;
+
+import com.example.graphql.v2018_12_31.type.Book;
+import com.example.graphql.v2018_12_31.type.BookInput; <i class="conum" data-value="1"></i><b>(1)</b>
+import com.example.repository.BookRepository;
+import org.springframework.stereotype.Component;
+
+@Component
+public class MutationResolver {
+
+  @Autowired
+  private BookRepository bookRepository;
+
+  public Book createBook(BookInput bookInput) { <i class="conum" data-value="2"></i><b>(2)</b>
+    return bookRepository.createBook(bookInput.getTitle(), bookInput.getPrice());
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The compiler generated the simple Java data class BookInput from the GraphQL input type
+BookInput.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The compiler translated this Java method signature from the field <code>createBook</code> of the GraphQL
+root object type Mutation.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_field"><a class="anchor" href="#_field"></a>Field</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the GraphQL conceptual model, a field is a function which yields a value.
+This GraphQL server implementation calls these functions <em>resolvers</em>.
+The framework implements two ways to yield a value.
+If a field does not have any arguments, then the framework reads a similarly-named property of a
+simple Java data object.
+If a field has one or more arguments, then the framework invokes a method of a Java class,
+passing the arguments to the method parameters.</p>
+</div>
+<div class="paragraph">
+<p>Suppose the GraphQL object type Author defines a field <code>books</code> which is intended to provide all
+books written by the author.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-graphql hljs" data-lang="graphql">type Author {
+  id: ID!
+  name: String!
+  books: [Book]!
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The framework will try to read the property <code>books</code> of the simple Java data class Author.
+To invoke a method of a Java class instead, add a custom directive to the field.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-graphql hljs" data-lang="graphql">type Author {
+  id: ID!
+  name: String!
+  books: [Book]!
+      @argument(name = "authorId", value = "((Author) environment.getSource()).getId()"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>@argument</code> directive causes the framework to invoke a method of a Java class, and
+adds an additional argument to the invocation.
+The argument value is a Java language expression.
+In the example expression, <code>environment</code> is an instance of
+<a href="https://static.javadoc.io/com.graphql-java/graphql-java/12.0/graphql/schema/DataFetchingEnvironment.html">DataFetchingEnvironment</a>.</p>
+</div>
+<div class="paragraph">
+<p>Add the method to be invoked to the QueryResolver class.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">  public List&lt;Book&gt; books(String authorId) {
+    return bookRepository.findByAuthorId(authorId);
+  }</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_modularize_graphql_schema"><a class="anchor" href="#_modularize_graphql_schema"></a>Modularize GraphQL Schema</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As the GraphQL schema grows more complex, you will want to organize the types and operations into
+multiple schema definition files.
+The framework merges multiple schema definition files in a version directory into a single GraphQL
+schema.</p>
+</div>
+<div class="paragraph">
+<p>As you add operations to the GraphQL root object types, the number of methods you need to maintain
+in the MutationResolver class and QueryResolver class may become unwieldly.
+Instead of making these two classes responsible for all your business logic, you can
+organize the methods into other Java resolver classes.</p>
+</div>
+<div class="paragraph">
+<p>Delete the schema.graphql file.
+Other files will replace it.</p>
+</div>
+<div class="paragraph">
+<p>Define the GraphQL root object type Mutation with no fields.
+You&#8217;re going to extend this type, and type extensions are only allowed on already defined types.</p>
+</div>
+<div class="listingblock">
+<div class="title">Mutation.graphql</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-graphql hljs" data-lang="graphql">type Mutation {
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Define the GraphQL root object type Query with no fields.</p>
+</div>
+<div class="listingblock">
+<div class="title">Query.graphql</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-graphql hljs" data-lang="graphql">type Query {
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Extend GraphQL root object type Query with author operations.
+A custom directive ties the fields defined in the object type extension to methods of Java class
+AuthorResolver.
+As an application developer, you must implement the AuthorResolver class.</p>
+</div>
+<div class="listingblock">
+<div class="title">Author.graphql</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-graphql hljs" data-lang="graphql">type Author {
+  id: ID!
+  name: String!
+}
+
+extend type Query @resolve(class: "AuthorResolver") {
+  author(id: ID!): Author
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Similarly extend Mutation and Query with book operations, and tie them to methods of Java class
+BookResolver.</p>
+</div>
+<div class="listingblock">
+<div class="title">Book.graphql</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-graphql hljs" data-lang="graphql">type Book {
+  id: ID!
+  title: String!
+  price: BigDecimal!
+}
+
+type BookInput {
+  title: String
+  price: BigDecimal
+}
+
+extend type Mutation @resolve(class: "BookResolver") {
+  createBook(bookInput: BookInput!): Book!
+}
+
+extend type Query @resolve(class: "BookResolver") {
+  book(id: ID!): Book
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_api_versioning"><a class="anchor" href="#_api_versioning"></a>API Versioning</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ideally, you want your server to implement a single API version which stays backward compatible.
+In general, these guidelines help you avoid making breaking changes to your API:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Only add new fields.</p>
+</li>
+<li>
+<p>Never delete or alter existing fields.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>There may come a time when an incompatible change is required.
+At that time, create a new API version implementing the incompatible change.
+The server handles requests to old and new API versions.
+Resolver classes only handle requests in the newest API version.
+The framework transforms requests and responses for older API versions into representations the
+resolver classes can handle.</p>
+</div>
+<div class="paragraph">
+<p>API versions are sorted from oldest to newest by comparing the version identifier.
+Numbers in versions are compared numerically.
+For example, version <code>v2</code> is older than <code>v11</code>, but they would be sorted in the opposite direction if
+compared lexicographically.</p>
+</div>
+<div class="sect2">
+<h3 id="_object_type_change"><a class="anchor" href="#_object_type_change"></a>Object Type Change</h3>
+<div class="paragraph">
+<p>For example, let&#8217;s add a new API version, v2019_01_01, which introduces an incompatible change.
+The new API version moves the field price from object type Book to a nested object.
+Clients will send requests to the new API version at URL path <code>/graphql/v2019_01_01</code>.</p>
+</div>
+<div class="paragraph">
+<p>Copy resources directory <code>src/main/resources/graphql/v2018_12_31/</code>
+to <code>src/main/resources/graphql/v2019_01_01/</code>.
+Change the Book definition in the new API version.</p>
+</div>
+<div class="listingblock">
+<div class="title">v2019_01_01/Book.graphql</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-graphql hljs" data-lang="graphql">type Offer {
+  price: BigDecimal! <i class="conum" data-value="1"></i><b>(1)</b>
+}
+
+type Book {
+  id: ID!
+  title: String!
+  offer: Offer!
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>In the previous API version, price is a field of object type Book.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Add a Java class describing the API change and how to transform an object type from the new
+API version to a representation acceptable to a client of the previous API version.</p>
+</div>
+<div class="listingblock">
+<div class="title">BookPriceChange.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example.graphql.v2019_01_01; <i class="conum" data-value="1"></i><b>(1)</b>
+
+import com.example.graphql.v2019_01_01.type.Book;
+import com.github.pukkaone.grapid.core.apichange.ObjectTypeChange;
+import org.springframework.stereotype.Component;
+
+@Component
+public class BookPriceChange
+    extends ObjectTypeChange&lt;Book, com.example.graphql.v2018_12_31.type.Book&gt; {
+
+  public BookPriceChange() {
+    super("In object type Book, field price moved to field of nested object offer.");
+  }
+
+  @Override
+  public void downgrade(Book source, com.example.graphql.v2018_12_31.type.Book target) {
+    target.setPrice(source.getOffer().getPrice());
+    target.removeField("offer");
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>By convention, the Java package corresponds to the API version introducing the change.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You must also change the resolver classes to use the Java classes generated from new API version.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_input_type_change"><a class="anchor" href="#_input_type_change"></a>Input Type Change</h3>
+<div class="paragraph">
+<p>Change the input type BookInput by moving the field price to a nested input.</p>
+</div>
+<div class="listingblock">
+<div class="title">v2019_01_01/Book.graphql</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-graphql hljs" data-lang="graphql">type OfferInput {
+  price: BigDecimal! <i class="conum" data-value="1"></i><b>(1)</b>
+}
+
+type BookInput {
+  title: String
+  offer: OfferInput
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>In the previous API version, price is a field of input type BookInput.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Add a Java class describing the API change and how to transform an input type from the previous
+API version to the new API version.</p>
+</div>
+<div class="listingblock">
+<div class="title">BookInputPriceChange.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example.graphql.v2019_01_01;
+
+import com.example.graphql.v2019_01_01.type.BookInput;
+import com.example.graphql.v2019_01_01.type.OfferInput;
+import com.github.pukkaone.grapid.core.apichange.InputTypeChange;
+import org.springframework.stereotype.Component;
+
+@Component
+public class BookInputPriceChange
+    extends InputTypeChange&lt;com.example.graphql.v2018_12_31.type.BookInput, BookInput&gt; {
+
+  public BookInputPriceChange() {
+    super("In input type BookInput, field price moved to field of nested input offer.");
+  }
+
+  @Override
+  public void upgrade(com.example.graphql.v2018_12_31.type.BookInput source, BookInput target) {
+    OfferInput offer = new OfferInput();
+    offer.setPrice(source.getPrice());
+
+    target.setOffer(offer);
+    target.removeField("price");
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_enum_type_change"><a class="anchor" href="#_enum_type_change"></a>Enum Type Change</h3>
+<div class="paragraph">
+<p>Suppose the previous API version defines an enum type.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-graphql hljs" data-lang="graphql">enum Meal {
+  BREAKFAST
+  LUNCH
+  DINNER
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The new API version adds an enum value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-graphql hljs" data-lang="graphql">enum Meal {
+  BREAKFAST
+  SECOND_BREAKFAST <i class="conum" data-value="1"></i><b>(1)</b>
+  LUNCH
+  DINNER
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The new API version adds this enum value.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Old clients will not understand the new enum value, so transform the new enum value to an enum value
+acceptable to old clients.</p>
+</div>
+<div class="listingblock">
+<div class="title">MealSecondBreakfastChange.java</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example.graphql.v2019_01_01;
+
+import com.example.graphql.v2019_01_01.type.Meal;
+import com.github.pukkaone.grapid.core.apichange.EnumTypeChange;
+
+public class MealSecondBreakfastChange
+    extends EnumTypeChange&lt;com.example.graphql.v2018_12_31.type.Meal, Meal&gt; {
+
+  public MealSecondBreakfastChange() {
+    super("Added enum value SECOND_BREAKFAST to enum type Meal.");
+  }
+
+  @Override
+  public String downgrade(String enumValueName) {
+    return enumValueName.equals(Meal.SECOND_BREAKFAST.name())
+        ? Meal.BREAKFAST.name() : enumValueName;
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_side_effect"><a class="anchor" href="#_side_effect"></a>Side Effect</h3>
+<div class="paragraph">
+<p>Sometimes a new API version introduces a change in the application&#8217;s behavior.
+The application must execute different logic depending on the API version of the request being
+processed.
+The application can use the RequestVersion object to check the API version of the current request.</p>
+</div>
+<div class="paragraph">
+<p>Inject a RequestVersion instance and the change instance.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Autowired
+private RequestVersion requestVersion;
+
+@Autowired
+private MealSecondBreakfastChange mealSecondBreakfastChange;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The application code checks if the change is active for the current request being processed.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">if (requestVersion.isActive(mealSecondBreakfastChange)) {</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script src="../../_/js/site.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js"></script>
+<script src="../../_/js/highlightjs-graphql.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function (event) {
+    hljs.registerLanguage('graphql', window.hljsDefineGraphQL);
+    document.querySelectorAll('pre code.hljs').forEach(function (block) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+  </body>
+</html>
