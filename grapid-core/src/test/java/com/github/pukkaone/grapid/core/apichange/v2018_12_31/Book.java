@@ -3,7 +3,6 @@ package com.github.pukkaone.grapid.core.apichange.v2018_12_31;
 import com.github.pukkaone.grapid.core.GraphQLObject;
 import java.math.BigDecimal;
 
-@SuppressWarnings({ "checkstyle:JavadocMethod", "checkstyle:JavadocType" })
 public class Book extends GraphQLObject {
   public Book() {
   }

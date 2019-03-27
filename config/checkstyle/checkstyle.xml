@@ -30,6 +30,10 @@ with modifications for this organization's coding convention.
 
     <module name="TreeWalker">
         <module name="SuppressWarningsHolder"/>
+        <module name="SuppressionXpathSingleFilter">
+          <property name="files" value="/src/test/"/>
+          <property name="checks" value="Javadoc.*"/>
+        </module>
         <module name="OuterTypeFilename"/>
         <module name="IllegalTokenText">
             <property name="tokens" value="STRING_LITERAL, CHAR_LITERAL"/>
@@ -271,6 +275,8 @@ with modifications for this organization's coding convention.
         <module name="EmptyCatchBlock">
             <property name="exceptionVariableName" value="expected"/>
         </module>
+        <module name="IllegalCatch"/>
+        <module name="IllegalThrows"/>
 <!--
         <module name="CommentsIndentation"/>
 -->

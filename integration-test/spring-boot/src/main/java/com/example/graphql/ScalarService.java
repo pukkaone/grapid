@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
  * Implements scalar operations.
  */
 @Service
-@SuppressWarnings("checkstyle:JavadocMethod")
 public class ScalarService {
 
   public BigDecimal echoBigDecimal(BigDecimal value) {

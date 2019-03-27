@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
  * Implements enum operations.
  */
 @Service
-@SuppressWarnings("checkstyle:JavadocMethod")
 public class MealService {
 
   public Meal bestMeal() {

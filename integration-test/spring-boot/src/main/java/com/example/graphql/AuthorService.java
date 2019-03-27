@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
  */
 @RequiredArgsConstructor
 @Service
-@SuppressWarnings("checkstyle:JavadocMethod")
 public class AuthorService {
 
   private final AuthorRepository authorRepository;

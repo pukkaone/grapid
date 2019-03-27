@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
  */
 @RequiredArgsConstructor
 @Service
-@SuppressWarnings("checkstyle:JavadocMethod")
 public class BookService {
 
   private final BookRepository bookRepository;

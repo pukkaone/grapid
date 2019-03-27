@@ -2,7 +2,6 @@ package com.github.pukkaone.grapid.core.apichange.v2019_01_01;
 
 import com.github.pukkaone.grapid.core.GraphQLObject;
 
-@SuppressWarnings({ "checkstyle:JavadocMethod", "checkstyle:JavadocType" })
 public class Author extends GraphQLObject {
   public Author() {
   }

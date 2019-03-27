@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
  * Implements root query operations.
  */
 @Service
-@SuppressWarnings("checkstyle:JavadocMethod")
 public class QueryService {
 
   public List<Version> versions() {
