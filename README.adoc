@@ -20,16 +20,6 @@ By default, the server URL path is `/graphql` relative to the context path.
 </dependency>
 ----
 
-The framework also requires this other Spring Boot starter in the Maven project.
-
-[source,xml]
-----
-<dependency>
-  <groupId>org.springframework.boot</groupId>
-  <artifactId>spring-boot-starter-web</artifactId>
-</dependency>
-----
-
 Add this Maven plugin which compiles GraphQL schema definition files to Java source files.
 
 [source,xml]

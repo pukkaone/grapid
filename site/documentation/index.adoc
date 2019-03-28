@@ -1,5 +1,5 @@
 = Documentation
-:revnumber: 0.1.0
+:revnumber: 0.2.0
 :toc: macro
 :toclevels: 2
 
