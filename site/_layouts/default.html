@@ -1,53 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-7747045-3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-7747045-3');
+  </script>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>{{ site.title }} - {{ page.title }}</title>
 
   <link rel="shortcut icon" href="/favicon.ico">
 
-  <!-- Bootstrap core -->
-  <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
-  <!-- Bootstrap theme -->
-  <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <!-- site style -->
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/atom-one-dark-reasonable.min.css">
   <link rel="stylesheet" href="{{ '/css/spring.css' | prepend: site.baseurl }}">
   <link rel="stylesheet" href="{{ '/css/site.css' | prepend: site.baseurl }}">
-
-  <!-- Google Analytics -->
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-7747045-3']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
 </head>
 <body>
-  <div class="navbar navbar-default navbar-static-top">
+  <nav class="navbar navbar-light bg-light">
     <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="{{ site.baseurl }}/">{{ site.title }}</a>
-      </div>
-      <ul class="nav navbar-nav">
-        <li><a href="{{ '/documentation/' | prepend: site.baseurl }}">Documentation</a></li>
+      <a class="navbar-brand" href="{{ site.baseurl }}/">{{ site.title }}</a>
+      <ul class="navbar-nav mr-auto">
+        <li class="navbar-item">
+          <a class="nav-link" href="{{ '/documentation/' | prepend: site.baseurl }}">Documentation</a>
+        </li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="https://github.com/pukkaone/grapid">GitHub</a></li>
+
+      <ul class="navbar-nav justify-content-end">
+        <li class="navbar-item">
+          <a class="nav-link" href="https://github.com/pukkaone/grapid">GitHub</a>
+        </li>
       </ul>
     </div>
-  </div>
+  </nav>
 
   <div class="container">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col">
         <div class="content">
           {{ content }}
         </div>

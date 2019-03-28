@@ -13,21 +13,19 @@ body, h1, h2, h3, h4, h5, h6 {
   text-shadow: 1px 1px #000;
 }
 
-.jumbotron, .jumbotron h1 small {
+.jumbotron, .jumbotron h1 {
   color: #fff;
 }
 
 .jumbotron address {
-  color: #040;
+  color: #2a4;
   font-size: 80%;
   margin-bottom: 0;
-  padding: 0;
-  text-align: right;
   text-shadow: none;
 }
 
 .jumbotron address a {
-  color: #040;
+  color: #2a4;
   text-decoration: underline;
 }
 
