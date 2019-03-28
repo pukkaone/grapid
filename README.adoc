@@ -93,10 +93,10 @@ import org.springframework.stereotype.Service;
 public class QueryService {
 
   public Author author(String id) { // <2>
-    var author = new Author();
-    author.setId("AUTHOR-1");
-    author.setName("NAME");
-    return author;
+    return Author.builder()
+        .id(id)
+        .name("NAME")
+        .build();
   }
 }
 ----
@@ -114,3 +114,20 @@ For more details, see the https://pukkaone.github.io/grapid/documentation/[Getti
 
 Version 0.x.x interfaces are unstable::
   Releases within major version 0 may have incompatible changes.
+
+
+== Building
+
+[NOTE]
+====
+Prerequisites are:
+
+  - Java 11
+  - Gradle
+====
+
+To compile the project and run integration tests:
+
+----
+gradle install check
+----

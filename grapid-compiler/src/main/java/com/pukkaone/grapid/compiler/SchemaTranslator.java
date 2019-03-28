@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.lang.model.element.Modifier;
 
@@ -120,8 +121,8 @@ public class SchemaTranslator {
     return ClassName.get(tiePackageName, serviceClass.simpleName() + TIE_SUFFIX);
   }
 
-  private ClassName toTypeClassName(String className) {
-    return ClassName.get(typePackageName, className);
+  private ClassName toTypeClassName(String simpleName, String... simpleNames) {
+    return ClassName.get(typePackageName, simpleName, simpleNames);
   }
 
   private void translateEnumTypeDefinition(EnumTypeDefinition enumType) {
@@ -397,7 +398,6 @@ public class SchemaTranslator {
 
     var setter = MethodSpec.methodBuilder("set" + capitalize(fieldName))
         .addModifiers(Modifier.PUBLIC)
-        .returns(void.class)
         .addParameter(javaType, "value")
         .addStatement("super.putFieldValue($S, value)", fieldName)
         .build();
@@ -440,32 +440,76 @@ public class SchemaTranslator {
     writeJavaFileToTypePackage(classBuilder.build());
   }
 
-  private void generateSimpleDataClass(ObjectTypeDefinition objectType) {
-    var className = toTypeClassName(objectType.getName());
-    objectTypeToClassMap.put(objectType.getName(), className);
-
-    var classBuilder = generateSimpleDataClassConstructors(className, objectType.getDescription());
-
-    boolean hasProperty = false;
-    for (var field : objectType.getFieldDefinitions()) {
-      if (!FieldTranslator.isServiceTied(objectType, field)) {
-        generateGetterSetter(field, classBuilder);
-        hasProperty = true;
-      }
-    }
+  private List<FieldDefinition> getProperties(ObjectTypeDefinition objectType) {
+    var properties = objectType.getFieldDefinitions()
+        .stream()
+        .filter(field -> !FieldTranslator.isServiceTied(objectType, field))
+        .collect(Collectors.toCollection(ArrayList::new));
 
     var objectTypeExtensions = typeDefinitionRegistry.objectTypeExtensions()
         .getOrDefault(objectType.getName(), List.of());
     for (var objectTypeExtension : objectTypeExtensions) {
       for (var field : objectTypeExtension.getFieldDefinitions()) {
         if (!FieldTranslator.isServiceTied(objectType, field)) {
-          generateGetterSetter(field, classBuilder);
-          hasProperty = true;
+          properties.add(field);
         }
       }
     }
 
-    if (hasProperty) {
+    return properties;
+  }
+
+  private void generateBuilder(
+      ClassName dataClass, List<FieldDefinition> properties, TypeSpec.Builder dataClassBuilder) {
+
+    var innerClass = toTypeClassName(dataClass.simpleName(), "Builder");
+    var innerClassBuilder = TypeSpec.classBuilder(innerClass.simpleName())
+        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+        .addField(FieldSpec.builder(dataClass, "result", Modifier.PRIVATE)
+            .initializer("new $T()", dataClass)
+            .build());
+
+    for (var property : properties) {
+      var javaType = typeTranslator.toJavaType(property.getType());
+      var setter = MethodSpec.methodBuilder(property.getName())
+          .addModifiers(Modifier.PUBLIC)
+          .returns(innerClass)
+          .addParameter(javaType, "value")
+          .addStatement("result.set$L(value)", capitalize(property.getName()))
+          .addStatement("return this")
+          .build();
+      innerClassBuilder.addMethod(setter);
+    }
+
+    innerClassBuilder.addMethod(MethodSpec.methodBuilder("build")
+        .addModifiers(Modifier.PUBLIC)
+        .returns(dataClass)
+        .addStatement("return result")
+        .build());
+
+    dataClassBuilder
+        .addType(innerClassBuilder.build())
+        .addMethod(MethodSpec.methodBuilder("builder")
+            .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+            .returns(innerClass)
+            .addStatement("return new $T()", innerClass)
+            .build());
+  }
+
+  private void generateSimpleDataClass(ObjectTypeDefinition objectType) {
+    var dataClass = toTypeClassName(objectType.getName());
+    objectTypeToClassMap.put(objectType.getName(), dataClass);
+
+    var classBuilder = generateSimpleDataClassConstructors(dataClass, objectType.getDescription());
+
+    var properties = getProperties(objectType);
+    for (var property : properties) {
+      generateGetterSetter(property, classBuilder);
+    }
+
+    generateBuilder(dataClass, properties, classBuilder);
+
+    if (!properties.isEmpty()) {
       writeJavaFileToTypePackage(classBuilder.build());
     }
   }
@@ -563,7 +607,6 @@ public class SchemaTranslator {
     var methodBuilder = MethodSpec.methodBuilder("addTypes")
         .addAnnotation(Override.class)
         .addModifiers(Modifier.PROTECTED)
-        .returns(void.class)
         .addParameter(RuntimeWiring.Builder.class, "builder")
         .addCode("builder\n")
         .addCode("$>$>");

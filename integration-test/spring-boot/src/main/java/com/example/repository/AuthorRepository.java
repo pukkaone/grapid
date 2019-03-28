@@ -19,9 +19,9 @@ public class AuthorRepository {
    * @return author
    */
   public Author createAuthor(AuthorInput authorInput) {
-    var author = new Author();
-    author.setId(UUID.randomUUID().toString());
-    author.setName(authorInput.getName());
-    return author;
+    return Author.builder()
+        .id(UUID.randomUUID().toString())
+        .name(authorInput.getName())
+        .build();
   }
 }

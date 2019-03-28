@@ -26,4 +26,3 @@ public class Book extends GraphQLObject {
     super.putFieldValue("offer", value);
   }
 }
-

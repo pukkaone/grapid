@@ -21,15 +21,15 @@ public class BookRepository {
    * @return book
    */
   public Book createBook(BookInput bookInput) {
-    var book = new Book();
-    book.setId(UUID.randomUUID().toString());
-    book.setTitle(bookInput.getTitle());
+    var offer = Offer.builder()
+        .price(bookInput.getOffer().getPrice())
+        .build();
 
-    var offer = new Offer();
-    offer.setPrice(bookInput.getOffer().getPrice());
-    book.setOffer(offer);
-
-    return book;
+    return Book.builder()
+        .id(UUID.randomUUID().toString())
+        .title(bookInput.getTitle())
+        .offer(offer)
+        .build();
   }
 
   /**
@@ -40,10 +40,10 @@ public class BookRepository {
    * @return book
    */
   public Book findById(String id) {
-    var book = new Book();
-    book.setId(id);
-    book.setTitle("TITLE");
-    return book;
+    return Book.builder()
+        .id(id)
+        .title("TITLE")
+        .build();
   }
 
   /**

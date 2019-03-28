@@ -8,16 +8,16 @@ import org.springframework.stereotype.Repository;
 public class AuthorRepository {
 
   public Author createAuthor(String name) {
-    var author = new Author();
-    author.setId(UUID.randomUUID().toString());
-    author.setName(name);
-    return author;
+    return Author.builder()
+        .id(UUID.randomUUID().toString())
+        .name(name)
+        .build();
   }
 
   public Author findById(String id) {
-    var author = new Author();
-    author.setId(id);
-    author.setName("NAME");
-    return author;
+    return Author.builder()
+        .id(id)
+        .name("NAME")
+        .build();
   }
 }
