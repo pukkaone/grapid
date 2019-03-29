@@ -64,17 +64,15 @@ type Query {
 }
 ----
 
-The Java package name where the compiler generates the code for a version is the concatenation of
-the package prefix configured in the plugin with the version identifier.  In this example, the
-compiler generates code to Java package `com.example.graphql.v2018_12_31`.
-
-Based on the GraphQL root object type name, the compiler assumes there is a Java class named
-QueryService.  As an application developer, you must implement the QueryService class.
+The GraphQL schema defines the root object type Query.  The compiler appends the suffix `Service` to
+this root object type name to derive the Java class name QueryService.  As an application developer,
+you must implement the QueryService class.  By convention, this class is in the Java package
+configured by the _packagePrefix_ property of the Maven plugin.
 
 .QueryService.java
 [source,java]
 ----
-package com.example.graphql.v2018_12_31;
+package com.example.graphql;
 
 import com.example.graphql.v2018_12_31.type.Author; // <1>
 import org.springframework.stereotype.Service;

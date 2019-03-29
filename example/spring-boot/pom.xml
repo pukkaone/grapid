@@ -22,6 +22,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <grapid.version>999-SNAPSHOT</grapid.version>
     <java.version>11</java.version>
   </properties>
 
@@ -29,7 +31,7 @@
     <dependency>
       <groupId>com.github.pukkaone</groupId>
       <artifactId>grapid-web-spring-boot-starter</artifactId>
-      <version>999-SNAPSHOT</version>
+      <version>${grapid.version}</version>
     </dependency>
 
     <dependency>
@@ -50,7 +52,7 @@
       <plugin>
         <groupId>com.github.pukkaone</groupId>
         <artifactId>grapid-maven-plugin</artifactId>
-        <version>999-SNAPSHOT</version>
+        <version>${grapid.version}</version>
         <configuration>
           <packagePrefix>com.example.graphql</packagePrefix>
         </configuration>
