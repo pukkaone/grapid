@@ -6,6 +6,18 @@ body, h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-family);
 }
 
+code, pre, pre > code {
+  font-family: var(--font-family-monospace);
+}
+
+pre.highlight {
+  background-color: #f8f8f8;
+}
+
+pre.highlight code {
+  color: #000;
+}
+
 .jumbotron {
   background: url("../images/background.jpg") no-repeat;
   background-size: cover;
