@@ -17,10 +17,10 @@ input BookInput {
   offer: OfferInput
 }
 
-extend type Mutation @tie(service: "BookService") {
+extend type Mutation @resolve(class: "BookResolver") {
   createBook(bookInput: BookInput!): Book!
 }
 
-extend type Query @tie(service: "BookService") {
+extend type Query @resolve(class: "BookResolver") {
   book(id: ID!): Book
 }

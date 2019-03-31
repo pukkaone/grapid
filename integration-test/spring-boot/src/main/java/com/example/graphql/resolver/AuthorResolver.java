@@ -1,4 +1,4 @@
-package com.example.graphql;
+package com.example.graphql.resolver;
 
 import com.example.graphql.v2019_01_01.type.Author;
 import com.example.graphql.v2019_01_01.type.AuthorInput;
@@ -8,14 +8,14 @@ import com.example.repository.BookRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * Implements author operations.
  */
+@Component
 @RequiredArgsConstructor
-@Service
-public class AuthorService {
+public class AuthorResolver {
 
   private final AuthorRepository authorRepository;
   private final BookRepository bookRepository;

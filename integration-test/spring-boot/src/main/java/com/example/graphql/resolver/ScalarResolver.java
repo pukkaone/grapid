@@ -1,4 +1,4 @@
-package com.example.graphql;
+package com.example.graphql.resolver;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -7,13 +7,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * Implements scalar operations.
  */
-@Service
-public class ScalarService {
+@Component
+public class ScalarResolver {
 
   public BigDecimal echoBigDecimal(BigDecimal value) {
     return value;

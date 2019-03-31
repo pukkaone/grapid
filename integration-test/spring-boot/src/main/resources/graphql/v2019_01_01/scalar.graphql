@@ -1,4 +1,4 @@
-extend type Query @tie(service: "ScalarService") {
+extend type Query @resolve(class: "ScalarResolver") {
   echoBigDecimal(value: BigDecimal!): BigDecimal!
   echoBigInteger(value: BigInteger!): BigInteger!
   echoBoolean(value: Boolean!): Boolean!

@@ -1,9 +1,10 @@
 = Grapid: Build GraphQL Servers Fast {nbsp}image:https://maven-badges.herokuapp.com/maven-central/com.github.pukkaone/grapid-core/badge.svg[Maven Central,link="https://maven-badges.herokuapp.com/maven-central/com.github.pukkaone/grapid-core"]
 
-Grapid is a schema-first framework for implementing GraphQL servers in Java.  As an application
-developer, you only need to implement the business logic for your API.  The framework translates
-GraphQL schemas to the code necessary for processing GraphQL requests, such as converting between
-GraphQL types and Java types.
+Grapid is an opinionated, schema-first framework for implementing GraphQL servers in Java.  The
+framework enforces a convention prescribing where you put GraphQL schema definition files and Java
+classes, but in exchange for these restrictions, you only need to implement the business logic for
+your API.  The framework translates GraphQL schemas to the code necessary for processing GraphQL
+requests, such as converting between GraphQL types and Java types.
 
 
 == GraphQL Server Quick Start Guide
@@ -48,7 +49,7 @@ identifier must be a valid Java identifier and not a Java keyword.
 By convention, GraphQL schema definition files are located under a resources directory
 `src/main/resources/graphql/_version_/` where _version_ identifies an API version.  Create the
 resources directory `src/main/resources/graphql/v2018_12_31/`.  Add this GraphQL schema definition
-file in the directory.  By convention, GraphQL schema definition file names have the extension
+file in the directory.  By convention, GraphQL schema definition file names end with the extension
 `.graphql`.
 
 .Author.graphql
@@ -64,21 +65,21 @@ type Query {
 }
 ----
 
-The GraphQL schema defines the root object type Query.  The compiler appends the suffix `Service` to
-this root object type name to derive the Java class name QueryService.  As an application developer,
-you must implement the QueryService class.  By convention, this class is in the Java package
-configured by the _packagePrefix_ property of the Maven plugin.
+The GraphQL schema defines the root object type Query.  The compiler appends the suffix `Resolver`
+to this root object type name to derive the Java class name QueryResolver.  As an application
+developer, you must implement the QueryResolver class.  By convention, this class is in the Java
+package named _packagePrefix_``.resolver``.
 
-.QueryService.java
+.QueryResolver.java
 [source,java]
 ----
-package com.example.graphql;
+package com.example.graphql.resolver;
 
 import com.example.graphql.v2018_12_31.type.Author; // <1>
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class QueryService {
+@Component
+public class QueryResolver {
 
   public Author author(String id) { // <2>
     return Author.builder()

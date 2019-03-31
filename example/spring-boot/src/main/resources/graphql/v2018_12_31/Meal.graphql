@@ -4,6 +4,6 @@ enum Meal {
   DINNER
 }
 
-extend type Query @tie(service: "MealService") {
+extend type Query @resolve(class: "MealResolver") {
   bestMeal: Meal!
 }

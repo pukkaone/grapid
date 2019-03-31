@@ -3,16 +3,15 @@ package com.example.graphql;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import com.example.graphql.IntegrationTestSupport;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests GraphQL non-root object type fields are tied to Java service methods.
+ * Tests GraphQL non-root object type fields are resolved by Java methods.
  */
-class ServiceTieIntegrationTest extends IntegrationTestSupport {
+class ResolverIntegrationTest extends IntegrationTestSupport {
 
   @Test
-  void should_tie_field_having_input_value_to_service() throws Exception {
+  void when_field_has_input_value_then_invoke_method() throws Exception {
     var mutation =
         "mutation {" +
           "createAuthor(authorInput: { name: \"NAME\" }) {" +
@@ -27,7 +26,7 @@ class ServiceTieIntegrationTest extends IntegrationTestSupport {
   }
 
   @Test
-  void should_tie_field_having_directive_to_service() throws Exception {
+  void when_field_has_directive_then_invoke_method() throws Exception {
     var mutation =
         "mutation { createAuthor(authorInput: { name: \"NAME\" }) { books { title } } }";
 

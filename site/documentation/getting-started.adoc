@@ -58,26 +58,27 @@ A version identifier must be a valid Java identifier and not a Java keyword.
 You can choose the version identifier to be anything within these restrictions.
 In this example, the version identifier follows a convention encoding a year, month, and day.
 
-Given a _version_ identifying an API version, the framework derives these names by convention.
+Given a _version_ identifying an API version, and the _packagePrefix_ property configured in the
+Maven plugin, the framework derives these names by convention.
 
 [cols="d,2d,2d"]
 |===
 | Concept | Value | Description
 
 | Resources directory
-| `src/main/resources/graphql/_version_/`
-| directory containing GraphQL schema definition files for the version
+| ``src/main/resources/graphql/``_version_``/``
+| You put GraphQL schema definition files for the version in this directory.
 
 | Java package
-| `_packagePrefix_`
-| The compiler generates Java classes applicable to all versions in this Java package.
+| _packagePrefix_``.resolver``
+| You put Java classes defining methods to yield field values in this Java package.
 
 | Java package
-| `_packagePrefix_._version_`
+| _packagePrefix_``.``_version_
 | The compiler generates Java classes for the version under this Java package.
 
 | URL path
-| `/graphql/_version_`
+| ``/graphql/``_version_
 | The GraphQL server receives requests for the version on this URL path.
 |===
 
@@ -115,30 +116,29 @@ a Plain Old Java Object or the acronym POJO), which only hold property values an
 perform any operations on those properties.
 
 The GraphQL schema defines the root object type Query.
-The compiler appends the suffix `Service` to this root object type name to derive the Java class
-name QueryService.
-The compiler assumes there is a Java class named QueryService having methods and method parameters
+The compiler appends the suffix `Resolver` to this root object type name to derive the Java class
+name QueryResolver.
+The compiler assumes there is a Java class named QueryResolver having methods and method parameters
 corresponding to the Query field and input value definitions.
 It generates code that invokes these methods.
 
-As an application developer, you must implement the QueryService class (and the classes it
+As an application developer, you must implement the QueryResolver class (and the classes it
 collaborates with to implement its operations).
-By convention, this class is in the Java package configured by the _packagePrefix_ property of the
-Maven plugin.
+By convention, this class is in the Java package named _packagePrefix_``.resolver``.
 
-.QueryService.java
+.QueryResolver.java
 [source,java]
 ----
-package com.example.graphql;
+package com.example.graphql.resolver;
 
 import com.example.graphql.v2018_12_31.type.Author; // <1>
 import com.example.graphql.v2018_12_31.type.Book;
 import com.example.repository.AuthorRepository;
 import com.example.repository.BookRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class QueryService {
+@Component
+public class QueryResolver {
 
   @Autowired
   private AuthorRepository authorRepository;
@@ -200,24 +200,24 @@ type Query {
 <1> Add input type BookInput.
 <2> Add root object type Mutation.
 
-The compiler assumes there is a Java class named MutationService having methods and method
+The compiler assumes there is a Java class named MutationResolver having methods and method
 parameters corresponding to the Mutation field and input value definitions.
 It generates code that invokes these methods.
 
-As an application developer, you must implement the MutationService class.
+As an application developer, you must implement the MutationResolver class.
 
-.MutationService.java
+.MutationResolver.java
 [source,java]
 ----
-package com.example.graphql;
+package com.example.graphql.resolver;
 
 import com.example.graphql.v2018_12_31.type.Book;
 import com.example.graphql.v2018_12_31.type.BookInput; // <1>
 import com.example.repository.BookRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class MutationService {
+@Component
+public class MutationResolver {
 
   @Autowired
   private BookRepository bookRepository;
@@ -236,11 +236,11 @@ public class MutationService {
 === Field
 
 In the GraphQL conceptual model, a field is a function which yields a value.
-(Some GraphQL server implementations call these functions _resolvers_.)
+This GraphQL server implementation calls these functions _resolvers_.
 The framework implements two ways to yield a value.
 If a field does not have any arguments, then the framework reads a similarly-named property of a
 simple Java data object.
-If a field has one or more arguments, then the framework invokes a method of a Java service class,
+If a field has one or more arguments, then the framework invokes a method of a Java class,
 passing the arguments to the method parameters.
 
 Suppose the GraphQL object type Author defines a field `books` which is intended to provide all
@@ -256,7 +256,7 @@ type Author {
 ----
 
 The framework will try to read the property `books` of the simple Java data class Author.
-To invoke a method of a Java service class instead, add a custom directive to the field.
+To invoke a method of a Java class instead, add a custom directive to the field.
 
 [source,graphql]
 ----
@@ -268,12 +268,13 @@ type Author {
 }
 ----
 
-The `@argument` directive invokes a Java method with an additional argument.
+The `@argument` directive causes the framework to invoke a method of a Java class, and
+adds an additional argument to the invocation.
 The argument value is a Java language expression.
 In the example expression, `environment` is an instance of
 https://static.javadoc.io/com.graphql-java/graphql-java/12.0/graphql/schema/DataFetchingEnvironment.html[DataFetchingEnvironment].
 
-Add the method to be invoked to the QueryService class.
+Add the method to be invoked to the QueryResolver class.
 
 [source,java]
 ----
@@ -290,9 +291,9 @@ into multiple schema definition files.
 The framework merges multiple files in a version directory into a single GraphQL schema.
 
 As you add operations to the GraphQL root object types, the number of methods you need to maintain
-in the MutationService class and QueryService class may become unwieldly.
-Instead of making these two service classes responsible for all your business logic, you can
-organize the methods into other Java service classes.
+in the MutationResolver class and QueryResolver class may become unwieldly.
+Instead of making these two classes responsible for all your business logic, you can
+organize the methods into other Java resolver classes.
 
 Delete the schema.graphql file.
 Other files will replace it.
@@ -318,8 +319,8 @@ type Query {
 
 Extend GraphQL root object type Query with author operations.
 A custom directive ties the fields defined in the object type extension to methods of Java class
-AuthorService.
-As an application developer, you must implement the AuthorService class.
+AuthorResolver.
+As an application developer, you must implement the AuthorResolver class.
 
 .Author.graphql
 [source,graphql]
@@ -329,13 +330,13 @@ type Author {
   name: String!
 }
 
-extend type Query @tie(service: "AuthorService") {
+extend type Query @resolve(class: "AuthorResolver") {
   author(id: ID!): Author
 }
 ----
 
 Similarly extend Mutation and Query with book operations, and tie them to methods of Java class
-BookService.
+BookResolver.
 
 .Book.graphql
 [source,graphql]
@@ -351,11 +352,11 @@ type BookInput {
   price: BigDecimal
 }
 
-extend type Mutation @tie(service: "BookService") {
+extend type Mutation @resolve(class: "BookResolver") {
   createBook(bookInput: BookInput!): Book!
 }
 
-extend type Query @tie(service: "BookService") {
+extend type Query @resolve(class: "BookResolver") {
   book(id: ID!): Book
 }
 ----
@@ -372,9 +373,9 @@ In general, these guidelines help you avoid making breaking changes to your API:
 There may come a time when an incompatible change is required.
 At that time, create a new API version implementing the incompatible change.
 The server handles requests to old and new API versions.
-Service classes only handle requests in the newest API version.
+Resolver classes only handle requests in the newest API version.
 The framework transforms requests and responses for older API versions into representations the
-service classes can handle.
+resolver classes can handle.
 
 API versions are sorted from oldest to newest by comparing the version identifier.
 Numbers in versions are compared numerically.
@@ -436,7 +437,7 @@ public class BookPriceChange
 ----
 <1> By convention, the Java package corresponds to the API version introducing the change.
 
-You must also change the service classes to use the Java classses generated from new API version.
+You must also change the resolver classes to use the Java classes generated from new API version.
 
 
 ==== Input Type Change

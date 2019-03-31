@@ -14,7 +14,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 /**
- * Adapts GraphQL request to service method.
+ * Executes GraphQL operations defined by a schema.
  */
 public class GraphQLExecutor {
 
@@ -24,9 +24,10 @@ public class GraphQLExecutor {
    * Constructor.
    *
    * @param schemaFilePattern
-   *     pattern to match schema file names
+   *     {@link PathMatchingResourcePatternResolver Ant-style pattern} to match schema definition
+   *     file names
    * @param runtimeWiring
-   *     specification for wiring GraphQL types to data fetchers.
+   *     specification for wiring GraphQL types to data fetchers
    */
   public GraphQLExecutor(String schemaFilePattern, RuntimeWiring runtimeWiring) {
     var typeDefinitionRegistry = parseSchemaFiles(schemaFilePattern);
@@ -41,7 +42,7 @@ public class GraphQLExecutor {
    * @param version
    *     API version
    * @param runtimeWiring
-   *     specification for wiring GraphQL types to data fetchers.
+   *     specification for wiring GraphQL types to data fetchers
    */
   public GraphQLExecutor(Version version, RuntimeWiring runtimeWiring) {
     this("classpath*:/graphql/" + version + "/**/*.graphql", runtimeWiring);
@@ -56,7 +57,7 @@ public class GraphQLExecutor {
 
     var schemaParser = new SchemaParser();
     typeDefinitionRegistry.merge(schemaParser.parse(ArgumentDirective.DEFINITION));
-    typeDefinitionRegistry.merge(schemaParser.parse(TieDirective.DEFINITION));
+    typeDefinitionRegistry.merge(schemaParser.parse(ResolveDirective.DEFINITION));
 
     var patternResolver = new PathMatchingResourcePatternResolver();
     Resource[] resources;

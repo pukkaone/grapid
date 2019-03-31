@@ -3,19 +3,19 @@ type Author {
   name: String!
   book(id: ID!): Book
   books: [Book]!
-      @argument(name: "authorId", value: "((Author) environment.getSource()).getId()")
+      @argument(name: "authorId", value: "((com.example.graphql.v2019_01_01.type.Author) environment.getSource()).getId()")
 }
 
 input AuthorInput {
   name: String
 }
 
-extend type Mutation @tie(service: "AuthorService") {
+extend type Mutation @resolve(class: "AuthorResolver") {
   createAuthor(authorInput: AuthorInput!): Author!
   createAuthors(authorInputs: [AuthorInput]!): [Author]!
 }
 
-extend type Query @tie(service: "AuthorService") {
+extend type Query @resolve(class: "AuthorResolver") {
   echoNullableAuthor(authorInput: AuthorInput): Author
   echoNullableListAuthor(authorInputs: [AuthorInput]): [Author]!
 }

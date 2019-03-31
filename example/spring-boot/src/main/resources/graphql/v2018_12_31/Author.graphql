@@ -3,10 +3,10 @@ type Author {
   name: String!
 }
 
-extend type Mutation @tie(service: "AuthorService") {
+extend type Mutation @resolve(class: "AuthorResolver") {
   createAuthor(name: String!): Author!
 }
 
-extend type Query @tie(service: "AuthorService") {
+extend type Query @resolve(class: "AuthorResolver") {
   author(id: ID!): Author
 }

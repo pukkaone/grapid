@@ -10,31 +10,31 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Translates field in GraphQL object type to method in Java service class.
+ * Translates field in GraphQL object type to method in Java class.
  */
 public class FieldTranslator {
 
   public static final String MUTATION = "Mutation";
   public static final String QUERY = "Query";
 
-  private Map<String, Map<ClassName, ServiceDefinition>> objectTypeToServiceClassToDefinitionMap =
+  private Map<String, Map<ClassName, ResolverDefinition>> objectTypeToResolverClassToDefinitionMap =
       new HashMap<>();
 
-  private Map<ClassName, ServiceDefinition> findByObjectTypeName(String objectTypeName) {
-    return objectTypeToServiceClassToDefinitionMap.computeIfAbsent(
+  private Map<ClassName, ResolverDefinition> findByObjectTypeName(String objectTypeName) {
+    return objectTypeToResolverClassToDefinitionMap.computeIfAbsent(
           objectTypeName, key -> new HashMap<>());
   }
 
   /**
-   * Checks if a method of a Java service class is invoked to yield the GraphQL field value.
+   * Checks if a method of a Java class is invoked to yield the GraphQL field value.
    *
    * @param objectType
    *         GraphQL object type
    * @param field
    *         GraphQL field
-   * @return true if a method of a Java service class is invoked to yield the field value
+   * @return true if a method of a Java class is invoked to yield the field value
    */
-  public static boolean isServiceTied(ObjectTypeDefinition objectType, FieldDefinition field) {
+  public static boolean isResolvedByMethod(ObjectTypeDefinition objectType, FieldDefinition field) {
     String objectTypeName = objectType.getName();
     if (MUTATION.equals(objectTypeName) || QUERY.equals(objectTypeName)) {
       return true;
@@ -50,47 +50,47 @@ public class FieldTranslator {
   }
 
   /**
-   * Translates fields in GraphQL object type to methods in Java service class.
+   * Translates fields in GraphQL object type to methods in Java class.
    *
    * @param objectType
    *     GraphQL object type
-   * @param serviceClass
-   *     Java service class
+   * @param resolverClass
+   *     Java class defining methods to yield field value
    */
-  public void translateFields(ObjectTypeDefinition objectType, ClassName serviceClass) {
-    var serviceClassToDefinitionMap = findByObjectTypeName(objectType.getName());
+  public void translateFields(ObjectTypeDefinition objectType, ClassName resolverClass) {
+    var resolverClassToDefinitionMap = findByObjectTypeName(objectType.getName());
 
-    var serviceDefinition = serviceClassToDefinitionMap.computeIfAbsent(
-        serviceClass, ServiceDefinition::new);
+    var resolverDefinition = resolverClassToDefinitionMap.computeIfAbsent(
+        resolverClass, ResolverDefinition::new);
     for (var field : objectType.getFieldDefinitions()) {
-      if (isServiceTied(objectType, field)) {
-        serviceDefinition.getFields().add(field);
+      if (isResolvedByMethod(objectType, field)) {
+        resolverDefinition.getFields().add(field);
       }
     }
   }
 
   /**
-   * Gets service methods translated from a GraphQL object type.
+   * Gets Java methods translated from a GraphQL object type.
    *
    * @param objectTypeName
    *     GraphQL object type
-   * @return service methods
+   * @return Java methods
    */
-  public Collection<ServiceDefinition> getServiceDefinitions(String objectTypeName) {
+  public Collection<ResolverDefinition> getResolverDefinitions(String objectTypeName) {
     return findByObjectTypeName(objectTypeName).values();
   }
 
   /**
-   * Gets service methods translated from all GraphQL object types.
+   * Gets Java methods translated from all GraphQL object types.
    *
-   * @return service methods
+   * @return Java methods
    */
-  public Collection<ServiceDefinition> getServiceDefinitions() {
-    var serviceClassToDefinitionMap = objectTypeToServiceClassToDefinitionMap.values()
+  public Collection<ResolverDefinition> getResolverDefinitions() {
+    var resolverClassToDefinitionMap = objectTypeToResolverClassToDefinitionMap.values()
         .stream()
         .flatMap(map -> map.entrySet().stream())
         .collect(Collectors.toMap(
-            Map.Entry::getKey, Map.Entry::getValue, ServiceDefinition::merge));
-    return serviceClassToDefinitionMap.values();
+            Map.Entry::getKey, Map.Entry::getValue, ResolverDefinition::merge));
+    return resolverClassToDefinitionMap.values();
   }
 }

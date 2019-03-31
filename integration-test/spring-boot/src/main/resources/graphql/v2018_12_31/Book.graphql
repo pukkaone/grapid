@@ -9,7 +9,7 @@ input BookInput {
   price: BigDecimal
 }
 
-extend type Mutation @tie(service: "BookService") {
+extend type Mutation @resolve(class: "BookResolver") {
   createBook(bookInput: BookInput!): Book!
   createBooks(bookInputs: [BookInput]!): [Book]!
 }

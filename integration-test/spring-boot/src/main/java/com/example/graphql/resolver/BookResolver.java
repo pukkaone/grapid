@@ -1,4 +1,4 @@
-package com.example.graphql;
+package com.example.graphql.resolver;
 
 import com.example.graphql.v2019_01_01.type.Book;
 import com.example.graphql.v2019_01_01.type.BookInput;
@@ -6,14 +6,14 @@ import com.example.repository.BookRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * Implements book operations.
  */
+@Component
 @RequiredArgsConstructor
-@Service
-public class BookService {
+public class BookResolver {
 
   private final BookRepository bookRepository;
 

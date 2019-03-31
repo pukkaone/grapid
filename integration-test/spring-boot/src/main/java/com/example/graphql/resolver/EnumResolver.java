@@ -1,14 +1,14 @@
-package com.example.graphql;
+package com.example.graphql.resolver;
 
 import com.example.graphql.v2019_01_01.type.Meal;
 import java.util.List;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * Implements enum operations.
  */
-@Service
-public class EnumService {
+@Component
+public class EnumResolver {
 
   public Meal bestMeal() {
     return Meal.SECOND_BREAKFAST;

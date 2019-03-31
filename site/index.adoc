@@ -15,8 +15,8 @@ type Query {
 .2. Write Java application code.
 [source,java]
 ----
-@Service
-public class QueryService {
+@Component
+public class QueryResolver {
   public String greet(String name) {
     return "Hello " + name;
   }

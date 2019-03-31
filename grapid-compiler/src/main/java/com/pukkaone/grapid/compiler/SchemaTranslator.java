@@ -4,7 +4,7 @@ import com.github.pukkaone.grapid.core.ArgumentDirective;
 import com.github.pukkaone.grapid.core.DataFetcherUtils;
 import com.github.pukkaone.grapid.core.GraphQLObject;
 import com.github.pukkaone.grapid.core.GraphQLObjectDataFetcher;
-import com.github.pukkaone.grapid.core.TieDirective;
+import com.github.pukkaone.grapid.core.ResolveDirective;
 import com.github.pukkaone.grapid.core.Version;
 import com.github.pukkaone.grapid.core.VersionExecutor;
 import com.github.pukkaone.grapid.core.apichange.ChangeDescription;
@@ -52,7 +52,7 @@ import javax.lang.model.element.Modifier;
  */
 public class SchemaTranslator {
 
-  private static final String SERVICE_SUFFIX = "Service";
+  private static final String RESOLVER_SUFFIX = "Resolver";
   private static final String TIE_SUFFIX = "Tie";
   private static final ClassName DATA_FETCHER = ClassName.get(DataFetcher.class);
   private static final ClassName LIST = ClassName.get(List.class);
@@ -73,7 +73,7 @@ public class SchemaTranslator {
               ClassName.get(Class.class), WildcardTypeName.subtypeOf(Object.class)),
           ParameterizedTypeName.get(Function.class, GraphQLObject.class, GraphQLObject.class));
 
-  private String servicePackageName;
+  private String resolverPackageName;
   private String tiePackageName;
   private String typePackageName;
   private String version;
@@ -103,7 +103,7 @@ public class SchemaTranslator {
   public SchemaTranslator(
       String packagePrefix, String version, boolean lastVersion, Path outputDirectory) {
 
-    this.servicePackageName = packagePrefix;
+    this.resolverPackageName = packagePrefix + ".resolver";
     this.tiePackageName = packagePrefix + '.' + version;
     this.typePackageName = packagePrefix + '.' + version + ".type";
     this.version = version;
@@ -113,12 +113,13 @@ public class SchemaTranslator {
     this.versionsClass = ClassName.get(packagePrefix, "Versions");
   }
 
-  private ClassName toServiceClassName(ObjectTypeDefinition objectType, String defaultName) {
-    return ClassName.get(servicePackageName, TieDirective.getService(objectType, defaultName));
+  private ClassName toResolverClassName(ObjectTypeDefinition objectType, String defaultName) {
+    return ClassName.get(
+        resolverPackageName, ResolveDirective.getResolver(objectType, defaultName));
   }
 
-  private ClassName toServiceTieClassName(ClassName serviceClass) {
-    return ClassName.get(tiePackageName, serviceClass.simpleName() + TIE_SUFFIX);
+  private ClassName toResolverTieClassName(ClassName resolverClass) {
+    return ClassName.get(tiePackageName, resolverClass.simpleName() + TIE_SUFFIX);
   }
 
   private ClassName toTypeClassName(String simpleName, String... simpleNames) {
@@ -152,8 +153,8 @@ public class SchemaTranslator {
   }
 
   private void translateFields(ObjectTypeDefinition objectType) {
-    var serviceClass = toServiceClassName(objectType, objectType.getName() + SERVICE_SUFFIX);
-    fieldTranslator.translateFields(objectType, serviceClass);
+    var resolverClass = toResolverClassName(objectType, objectType.getName() + RESOLVER_SUFFIX);
+    fieldTranslator.translateFields(objectType, resolverClass);
   }
 
   private void translateObjectType(ObjectTypeDefinition objectType) {
@@ -283,7 +284,7 @@ public class SchemaTranslator {
 
   private CodeBlock generateDataFetcherExpression(FieldDefinition field) {
     var expression = CodeBlock.builder()
-        .add("service.$L(", field.getName())
+        .add("resolver.$L(", field.getName())
         .indent().indent()
         .add(generateArguments(field))
         .add(")")
@@ -317,18 +318,18 @@ public class SchemaTranslator {
         .build();
   }
 
-  private void generateServiceTie(ServiceDefinition service) {
-    if (service.getFields().isEmpty()) {
+  private void generateResolverTie(ResolverDefinition resolver) {
+    if (resolver.getFields().isEmpty()) {
       return;
     }
 
-    var serviceTieClass = toServiceTieClassName(service.getServiceClass());
-    var classBuilder = TypeSpec.classBuilder(serviceTieClass)
+    var resolverTieClass = toResolverTieClassName(resolver.getResolverClass());
+    var classBuilder = TypeSpec.classBuilder(resolverTieClass)
         .addAnnotation(CodeGeneratorUtils.GENERATED)
-        .addAnnotation(CodeGeneratorUtils.generateNamedAnnotation(serviceTieClass))
+        .addAnnotation(CodeGeneratorUtils.generateNamedAnnotation(resolverTieClass))
         .addAnnotation(CodeGeneratorUtils.SINGLETON)
         .addModifiers(Modifier.PUBLIC)
-        .addField(FieldSpec.builder(service.getServiceClass(), "service", Modifier.PRIVATE)
+        .addField(FieldSpec.builder(resolver.getResolverClass(), "resolver", Modifier.PRIVATE)
             .addAnnotation(CodeGeneratorUtils.INJECT)
             .build());
 
@@ -339,7 +340,7 @@ public class SchemaTranslator {
               .build());
     }
 
-    for (var field : service.getFields()) {
+    for (var field : resolver.getFields()) {
       classBuilder.addField(generateDataFetcher(field));
     }
 
@@ -443,14 +444,14 @@ public class SchemaTranslator {
   private List<FieldDefinition> getProperties(ObjectTypeDefinition objectType) {
     var properties = objectType.getFieldDefinitions()
         .stream()
-        .filter(field -> !FieldTranslator.isServiceTied(objectType, field))
+        .filter(field -> !FieldTranslator.isResolvedByMethod(objectType, field))
         .collect(Collectors.toCollection(ArrayList::new));
 
     var objectTypeExtensions = typeDefinitionRegistry.objectTypeExtensions()
         .getOrDefault(objectType.getName(), List.of());
     for (var objectTypeExtension : objectTypeExtensions) {
       for (var field : objectTypeExtension.getFieldDefinitions()) {
-        if (!FieldTranslator.isServiceTied(objectType, field)) {
+        if (!FieldTranslator.isResolvedByMethod(objectType, field)) {
           properties.add(field);
         }
       }
@@ -526,15 +527,15 @@ public class SchemaTranslator {
     }
   }
 
-  private List<CodeBlock> generateServiceTieRuntimeWiring(ObjectTypeDefinition rootType) {
+  private List<CodeBlock> generateResolverTieRuntimeWiring(ObjectTypeDefinition rootType) {
     List<CodeBlock> dataFetcherInvocations = new ArrayList<>();
-    for (var service : fieldTranslator.getServiceDefinitions(rootType.getName())) {
-      var serviceTieClass = toServiceTieClassName(service.getServiceClass());
-      for (var field : service.getFields()) {
+    for (var resolver : fieldTranslator.getResolverDefinitions(rootType.getName())) {
+      var resolverTieClass = toResolverTieClassName(resolver.getResolverClass());
+      for (var field : resolver.getFields()) {
         dataFetcherInvocations.add(CodeBlock.of(
             ".dataFetcher($S, the$T.$N)",
             field.getName(),
-            serviceTieClass,
+            resolverTieClass,
             field.getName()));
       }
     }
@@ -555,10 +556,10 @@ public class SchemaTranslator {
     switch (objectType.getName()) {
       case FieldTranslator.MUTATION:
       case FieldTranslator.QUERY:
-        dataFetcherInvocations.addAll(generateServiceTieRuntimeWiring(objectType));
+        dataFetcherInvocations.addAll(generateResolverTieRuntimeWiring(objectType));
         break;
       default:
-        dataFetcherInvocations.addAll(generateServiceTieRuntimeWiring(objectType));
+        dataFetcherInvocations.addAll(generateResolverTieRuntimeWiring(objectType));
         dataFetcherInvocations.add(generateSimpleDataRuntimeWiring());
     }
 
@@ -592,14 +593,14 @@ public class SchemaTranslator {
             .addStatement("return $T.$N", versionsClass, version)
             .build());
 
-    for (var service : fieldTranslator.getServiceDefinitions()) {
-      if (service.getFields().isEmpty()) {
+    for (var resolver : fieldTranslator.getResolverDefinitions()) {
+      if (resolver.getFields().isEmpty()) {
         continue;
       }
 
-      ClassName serviceTieClass = toServiceTieClassName(service.getServiceClass());
+      ClassName resolverTieClass = toResolverTieClassName(resolver.getResolverClass());
       classBuilder.addField(FieldSpec.builder(
-          serviceTieClass, "the" + serviceTieClass.simpleName(), Modifier.PRIVATE)
+          resolverTieClass, "the" + resolverTieClass.simpleName(), Modifier.PRIVATE)
           .addAnnotation(CodeGeneratorUtils.INJECT)
           .build());
     }
@@ -811,7 +812,7 @@ public class SchemaTranslator {
       }
     }
 
-    fieldTranslator.getServiceDefinitions().forEach(this::generateServiceTie);
+    fieldTranslator.getResolverDefinitions().forEach(this::generateResolverTie);
     generateVersionExecutorTie();
     generateVersionChangesTie(previousVersionSchema);
   }
