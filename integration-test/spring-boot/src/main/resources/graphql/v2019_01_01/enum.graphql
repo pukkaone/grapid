@@ -5,7 +5,7 @@ enum Meal {
   DINNER
 }
 
-extend type Query @resolve(class: "EnumResolver") {
+extend type Query @resolve(class: "com.example.service.EnumService") {
   bestMeal: Meal!
   echoEnum(value: Meal!): Meal!
   echoListEnum(value: [Meal]!): [Meal]!

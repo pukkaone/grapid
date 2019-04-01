@@ -113,9 +113,11 @@ public class SchemaTranslator {
     this.versionsClass = ClassName.get(packagePrefix, "Versions");
   }
 
-  private ClassName toResolverClassName(ObjectTypeDefinition objectType, String defaultName) {
-    return ClassName.get(
-        resolverPackageName, ResolveDirective.getResolver(objectType, defaultName));
+  private ClassName toResolverClassName(ObjectTypeDefinition objectType, String defaultClass) {
+    String className = ResolveDirective.getClass(objectType, defaultClass);
+    return className.contains(".")
+        ? ClassName.bestGuess(className)
+        : ClassName.get(resolverPackageName, className);
   }
 
   private ClassName toResolverTieClassName(ClassName resolverClass) {

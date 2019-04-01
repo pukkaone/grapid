@@ -7,7 +7,7 @@ dependencies {
 
 task integrationTest(type: Exec) {
   workingDir "${rootDir}/integration-test/spring-boot"
-  commandLine "${rootDir}/mvnw", "-Dgrapid.version=${project.version}", '--errors', 'clean', 'test'
+  commandLine "${rootDir}/mvnw", "-Dgrapid.version=${project.version}", '--batch-mode', '--errors', 'clean', 'test'
 }
 
 check.dependsOn(integrationTest)

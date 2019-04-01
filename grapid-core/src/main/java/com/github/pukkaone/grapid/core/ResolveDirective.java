@@ -24,7 +24,7 @@ public final class ResolveDirective {
    *     default Java class
    * @return Java class
    */
-  public static String getResolver(ObjectTypeDefinition objectType, String defaultClass) {
+  public static String getClass(ObjectTypeDefinition objectType, String defaultClass) {
     var directive = objectType.getDirective(ResolveDirective.NAME);
     if (directive == null) {
       return defaultClass;
