@@ -11,6 +11,6 @@ dependencies {
   api 'com.graphql-java:graphql-java:12.0'
   api 'javax.annotation:javax.annotation-api:1.3.2'
   api 'javax.inject:javax.inject:1'
-  implementation "org.springframework:spring-context:${springVersion}"
-  implementation "org.springframework:spring-web:${springVersion}"
+  implementation "org.springframework:spring-context:${springFrameworkVersion}"
+  implementation "org.springframework:spring-web:${springFrameworkVersion}"
 }
