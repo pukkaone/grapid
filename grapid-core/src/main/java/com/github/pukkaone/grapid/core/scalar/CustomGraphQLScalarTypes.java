@@ -1,6 +1,7 @@
 package com.github.pukkaone.grapid.core.scalar;
 
 import graphql.schema.GraphQLScalarType;
+import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -26,15 +27,23 @@ public class CustomGraphQLScalarTypes {
         .collect(Collectors.toMap(GraphQLScalarType::getName, Function.identity()));
   }
 
+  private static Class<?> toJavaType(GraphQLScalarType scalarType) {
+    var coercing = scalarType.getCoercing();
+    var typeArgument = ((ParameterizedType) coercing.getClass().getGenericInterfaces()[0])
+        .getActualTypeArguments()[0];
+    return (Class<?>) typeArgument;
+  }
+
   /**
-   * Finds custom GraphQL scalar type by name.
+   * Translates custom GraphQL scalar type to Java type.
    *
-   * @param name
-   *         to find
-   * @return scalar type, or empty if not found
+   * @param scalarType
+   *         GraphQL scalar type
+   * @return Java type, or empty if not found
    */
-  public Optional<GraphQLScalarType> findByName(String name) {
-    return Optional.ofNullable(nameToScalarTypeMap.get(name));
+  public Optional<Class<?>> toJavaType(String scalarType) {
+    return Optional.ofNullable(nameToScalarTypeMap.get(scalarType))
+        .map(CustomGraphQLScalarTypes::toJavaType);
   }
 
   /**

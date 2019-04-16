@@ -69,7 +69,9 @@ public class LocalDateTimeScalarTypeBuilder implements GraphQLScalarTypeBuilder 
   public GraphQLScalarType build() {
     return GraphQLScalarType.newScalar()
         .name(LocalDateTime.class.getSimpleName())
-        .description(LocalDateTime.class.getName())
+        .description(
+            "Date and time without time zone as used in human communication. " +
+            "Value is a string formatted as yyyy-MM-dd'T'HH:mm:ss")
         .definition(ScalarTypeDefinition.newScalarTypeDefinition()
             .name(LocalDateTime.class.getSimpleName())
             .build())

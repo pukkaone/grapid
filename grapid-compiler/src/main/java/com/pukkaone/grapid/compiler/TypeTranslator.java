@@ -80,8 +80,8 @@ public class TypeTranslator {
       case SHORT:
         return com.squareup.javapoet.TypeName.SHORT;
       default:
-        return CustomGraphQLScalarTypes.INSTANCE.findByName(typeName)
-            .map(scalarType -> ClassName.bestGuess(scalarType.getDescription()))
+        return CustomGraphQLScalarTypes.INSTANCE.toJavaType(typeName)
+            .map(ClassName::get)
             .orElse(null);
     }
   }
