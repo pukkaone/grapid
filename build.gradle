@@ -34,8 +34,8 @@ subprojects {
 
   ext {
     lombokVersion = '1.18.6'
-    springBootVersion = '2.1.4.RELEASE'
-    springFrameworkVersion = '5.1.6.RELEASE'
+    springBootVersion = '2.1.5.RELEASE'
+    springFrameworkVersion = '5.1.7.RELEASE'
 
     isUploadArchivesEnabled =
         project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
@@ -51,7 +51,7 @@ subprojects {
   sourceCompatibility = JavaVersion.VERSION_11
 
   checkstyle {
-    toolVersion = '8.18'
+    toolVersion = '8.20'
   }
 
   test {

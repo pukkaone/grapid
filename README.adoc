@@ -1,10 +1,10 @@
 = Grapid: Build GraphQL Servers Fast {nbsp}image:https://maven-badges.herokuapp.com/maven-central/com.github.pukkaone/grapid-core/badge.svg[Maven Central,link="https://maven-badges.herokuapp.com/maven-central/com.github.pukkaone/grapid-core"]
 
-Grapid is an opinionated, schema-first framework for implementing GraphQL servers in Java.  The
-framework enforces a convention prescribing where you put GraphQL schema definition files and Java
-classes, but in exchange for these restrictions, you only need to implement the business logic for
-your API.  The framework translates GraphQL schemas to the code necessary for processing GraphQL
-requests, such as converting between GraphQL types and Java types.
+Grapid is an opinionated, schema-first framework for implementing GraphQL servers in Java.  While
+the framework prescribes where you put GraphQL schema definition files and Java classes, you only
+need to implement the business logic for your API.  The framework translates GraphQL schemas to the
+code necessary for processing GraphQL requests, such as converting between GraphQL types and Java
+types.
 
 
 == GraphQL Server Quick Start Guide

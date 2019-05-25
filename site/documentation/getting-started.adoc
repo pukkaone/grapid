@@ -54,8 +54,7 @@ An API version represents a set of types and operations defined by a GraphQL sch
 A version identifier must be a valid Java identifier and not a Java keyword.
 ****
 
-[NOTE]
-You can choose the version identifier to be anything within these restrictions.
+NOTE: You can choose the version identifier to be anything within these restrictions.
 In this example, the version identifier follows a convention encoding a year, month, and day.
 
 Given a _version_ identifying an API version, and the _packagePrefix_ property configured in the
@@ -88,8 +87,7 @@ The compiler generates the code for this version to Java package `com.example.gr
 
 Add this GraphQL schema definition file in the version directory.
 
-[NOTE]
-By convention, GraphQL schema definition file names end with the extension `.graphql`.
+NOTE: By convention, GraphQL schema definition file names end with the extension `.graphql`.
 
 .schema.graphql
 [source,graphql]
