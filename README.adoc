@@ -107,13 +107,10 @@ Version 0.x.x interfaces are unstable::
 
 == Building
 
-[NOTE]
-====
 Prerequisites are:
 
   - Java 11
   - Gradle
-====
 
 To compile the project and run integration tests:
 
