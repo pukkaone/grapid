@@ -34,8 +34,8 @@ subprojects {
 
   ext {
     lombokVersion = '1.18.8'
-    springBootVersion = '2.1.6.RELEASE'
-    springFrameworkVersion = '5.1.7.RELEASE'
+    springBootVersion = '2.1.8.RELEASE'
+    springFrameworkVersion = '5.1.9.RELEASE'
 
     isUploadArchivesEnabled =
         project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
@@ -43,7 +43,7 @@ subprojects {
 
   dependencies {
     testImplementation 'org.assertj:assertj-core:3.12.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.5.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.5.1'
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
   }
@@ -51,7 +51,7 @@ subprojects {
   sourceCompatibility = JavaVersion.VERSION_11
 
   checkstyle {
-    toolVersion = '8.22'
+    toolVersion = '8.24'
   }
 
   test {

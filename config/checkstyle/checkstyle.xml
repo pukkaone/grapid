@@ -15,10 +15,21 @@ with modifications for this organization's coding convention.
     <property name="severity" value="error"/>
 
     <property name="fileExtensions" value="java, properties, xml"/>
+    <!-- Excludes all 'module-info.java' files              -->
+    <!-- See https://checkstyle.org/config_filefilters.html -->
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value="module\-info\.java$"/>
+    </module>
     <!-- Checks for whitespace                               -->
     <!-- See http://checkstyle.sf.net/config_whitespace.html -->
     <module name="FileTabCharacter">
         <property name="eachLine" value="true"/>
+    </module>
+
+    <module name="LineLength">
+        <property name="fileExtensions" value="java"/>
+        <property name="max" value="100"/>
+        <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
     </module>
 
     <module name="RegexpSingleline">
@@ -32,7 +43,7 @@ with modifications for this organization's coding convention.
         <module name="SuppressWarningsHolder"/>
         <module name="SuppressionXpathSingleFilter">
           <property name="files" value="/src/test/"/>
-          <property name="checks" value="Javadoc.*"/>
+          <property name="checks" value=".*Javadoc.*"/>
         </module>
         <module name="OuterTypeFilename"/>
         <module name="IllegalTokenText">
@@ -46,10 +57,6 @@ with modifications for this organization's coding convention.
             <property name="allowEscapesForControlCharacters" value="true"/>
             <property name="allowByTailComment" value="true"/>
             <property name="allowNonPrintableEscapes" value="true"/>
-        </module>
-        <module name="LineLength">
-            <property name="max" value="100"/>
-            <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
         </module>
         <module name="MethodCount">
             <property name="maxTotal" value="100"/>
@@ -88,6 +95,7 @@ with modifications for this organization's coding convention.
         </module>
         <module name="WhitespaceAround">
             <property name="allowEmptyConstructors" value="true"/>
+            <property name="allowEmptyLambdas" value="true"/>
             <property name="allowEmptyMethods" value="true"/>
             <property name="allowEmptyTypes" value="true"/>
             <property name="allowEmptyLoops" value="true"/>
@@ -241,6 +249,7 @@ with modifications for this organization's coding convention.
             <property name="allowSamelineMultipleAnnotations" value="true"/>
         </module>
         <module name="NonEmptyAtclauseDescription"/>
+        <module name="InvalidJavadocPosition"/>
         <module name="JavadocTagContinuationIndentation"/>
         <module name="SummaryJavadoc">
             <property name="forbiddenSummaryFragments"
@@ -257,12 +266,13 @@ with modifications for this organization's coding convention.
             <property name="allowMissingParamTags" value="true"/>
             <property name="allowMissingThrowsTags" value="true"/>
             <property name="allowMissingReturnTag" value="true"/>
-            <property name="minLineCount" value="-1"/>
-            <property name="allowedAnnotations" value="Bean, Override, ParameterizedTest, Test"/>
+            <property name="allowedAnnotations" value="Override, Test"/>
             <property name="allowThrowsTagsForSubclasses" value="true"/>
         </module>
-        <module name="JavadocType">
+        <module name="MissingJavadocMethod">
             <property name="scope" value="protected"/>
+            <property name="minLineCount" value="-1"/>
+            <property name="allowedAnnotations" value="Bean, Override, Test"/>
         </module>
         <module name="MethodName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9_]*$"/>

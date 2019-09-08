@@ -6,8 +6,9 @@ import java.util.List;
 /**
  * Version GraphQL object.
  */
-@SuppressWarnings("checkstyle:JavadocMethod")
+@SuppressWarnings("checkstyle:MissingJavadocMethod")
 public class Version extends GraphQLObject {
+
   public Version() {
   }
 

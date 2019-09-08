@@ -5,8 +5,9 @@ import com.github.pukkaone.grapid.core.GraphQLObject;
 /**
  * Change GraphQL object.
  */
-@SuppressWarnings("checkstyle:JavadocMethod")
+@SuppressWarnings("checkstyle:MissingJavadocMethod")
 public class Change extends GraphQLObject {
+
   public Change() {
   }
 
