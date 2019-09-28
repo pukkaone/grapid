@@ -119,12 +119,12 @@ public class VersionsTranslator {
         .addModifiers(Modifier.PUBLIC)
         .addSuperinterface(VersionFactory.class);
 
-    var sortedVersions = versionDirectories.stream()
+    var versions = versionDirectories.stream()
         .map(VersionsTranslator::extractVersion)
         .collect(Collectors.toList());
 
     int ordinal = 0;
-    for (var version : sortedVersions) {
+    for (var version : versions) {
       classBuilder.addField(FieldSpec.builder(
           Version.class, version, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
           .initializer("new $T($S, $L)", Version.class, version, ordinal++)
@@ -133,12 +133,12 @@ public class VersionsTranslator {
 
     classBuilder.addField(FieldSpec.builder(
         ParameterizedTypeName.get(Map.class, String.class, Version.class),
-        "stringToVersionMap",
+        "identifierToVersionMap",
         Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
         .initializer(CodeBlock.builder()
             .add("Map.ofEntries(\n")
             .add("$>$>")
-            .add(CodeBlock.join(generateEntries(sortedVersions), ",\n"))
+            .add(CodeBlock.join(generateEntries(versions), ",\n"))
             .add("$<$<")
             .add(")")
             .build())
@@ -148,8 +148,8 @@ public class VersionsTranslator {
         .addAnnotation(Override.class)
         .addModifiers(Modifier.PUBLIC)
         .returns(Version.class)
-        .addParameter(String.class, "input")
-        .addStatement("return stringToVersionMap.get(input)")
+        .addParameter(String.class, "identifier")
+        .addStatement("return identifierToVersionMap.get(identifier)")
         .build());
 
     writeJavaFile(classBuilder);

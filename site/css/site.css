@@ -18,29 +18,6 @@ code, pre.highlight code {
   color: #677;
 }
 
-.jumbotron {
-  background: url("../images/background.jpg") no-repeat;
-  background-size: cover;
-  padding-bottom: 20px;
-  text-shadow: 1px 1px #000;
-}
-
-.jumbotron, .jumbotron h1 {
-  color: #fff;
-}
-
-.jumbotron address {
-  color: #2a4;
-  font-size: 80%;
-  margin-bottom: 0;
-  text-shadow: none;
-}
-
-.jumbotron address a {
-  color: #2a4;
-  text-decoration: underline;
-}
-
 .literalblock pre::selection,
 .listingblock pre[class="highlight"]::selection,
 .highlight::selection,

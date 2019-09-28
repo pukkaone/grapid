@@ -284,9 +284,10 @@ Add the method to be invoked to the QueryResolver class.
 
 === Modularize GraphQL Schema
 
-As the complexity of the GraphQL schema grows, you will want to organize the types and operations
-into multiple schema definition files.
-The framework merges multiple files in a version directory into a single GraphQL schema.
+As the GraphQL schema grows more complex, you will want to organize the types and operations into
+multiple schema definition files.
+The framework merges multiple schema definition files in a version directory into a single GraphQL
+schema.
 
 As you add operations to the GraphQL root object types, the number of methods you need to maintain
 in the MutationResolver class and QueryResolver class may become unwieldly.
@@ -545,7 +546,9 @@ public class MealSecondBreakfastChange
 ==== Side Effect
 
 Sometimes a new API version introduces a change in the application's behavior.
-The application logic is different depending on the API version of the request being processed.
+The application must execute different logic depending on the API version of the request being
+processed.
+The application can use the RequestVersion object to check the API version of the current request.
 
 Inject a RequestVersion instance and the change instance.
 

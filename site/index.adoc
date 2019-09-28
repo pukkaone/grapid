@@ -1,4 +1,3 @@
-= Build GraphQL Servers Fast
 :page-layout: home
 
 

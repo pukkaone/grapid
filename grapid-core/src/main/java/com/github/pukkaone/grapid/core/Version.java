@@ -12,13 +12,13 @@ import lombok.RequiredArgsConstructor;
 public class Version {
 
   @EqualsAndHashCode.Include
-  private final String version;
+  private final String identifier;
 
   @Getter
   private final int ordinal;
 
   @Override
   public String toString() {
-    return version;
+    return identifier;
   }
 }

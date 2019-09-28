@@ -2,15 +2,14 @@ rootProject.version = readVersion()
 
 // Gets version from Git tag.
 def readVersion() {
-  def output = new ByteArrayOutputStream()
-  def result = exec {
-    commandLine = ['git', 'describe', '--dirty']
-    standardOutput = output
-    ignoreExitValue = true
-  }
-  def version = (result.getExitValue() == 0) ?
-      output.toString().trim() : 'UNKNOWN'
-  if (version.endsWith('-dirty') || version ==~ /.*-\d+-g[0-9a-f]+/) {
+  def output = new StringBuilder()
+  def error = new StringBuilder()
+  'git describe --dirty'.execute().waitForProcessOutput(output, error)
+  def version = output.toString().trim()
+  if (version.isEmpty()) {
+    println error
+    version = 'UNKNOWN'
+  } else if (version.endsWith('-dirty') || version ==~ /.*-\d+-g[0-9a-f]+/) {
     // Assign version for work in progress.
     version = '999-SNAPSHOT'
   }
@@ -43,7 +42,7 @@ subprojects {
 
   dependencies {
     testImplementation 'org.assertj:assertj-core:3.12.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.5.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
   }
