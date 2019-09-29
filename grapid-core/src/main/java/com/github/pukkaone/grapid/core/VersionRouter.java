@@ -1,5 +1,9 @@
 package com.github.pukkaone.grapid.core;
 
+import graphql.schema.idl.RuntimeWiring;
+import graphql.validation.rules.OnValidationErrorStrategy;
+import graphql.validation.rules.ValidationRules;
+import graphql.validation.schemawiring.ValidationSchemaWiring;
 import java.util.Collection;
 import java.util.Map;
 
@@ -25,9 +29,17 @@ public class VersionRouter {
 
     for (var versionExecutor : versionExecutors) {
       var executor = new GraphQLExecutor(
-          versionExecutor.getVersion(), versionExecutor.getRuntimeWiring());
+          versionExecutor.getVersion(), buildRuntimeWiring(versionExecutor.getRuntimeWiring()));
       executors[versionExecutor.getVersion().getOrdinal()] = executor;
     }
+  }
+
+  private RuntimeWiring buildRuntimeWiring(RuntimeWiring.Builder builder) {
+    ValidationRules validationRules = ValidationRules.newValidationRules()
+        .onValidationErrorStrategy(OnValidationErrorStrategy.RETURN_NULL)
+        .build();
+    return builder.directiveWiring(new ValidationSchemaWiring(validationRules))
+        .build();
   }
 
   /**

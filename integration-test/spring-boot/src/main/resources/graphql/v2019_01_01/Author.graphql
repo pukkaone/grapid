@@ -7,7 +7,7 @@ type Author {
 }
 
 input AuthorInput {
-  name: String
+  name: String @Size(min: 1)
 }
 
 extend type Mutation @resolve(class: "AuthorResolver") {

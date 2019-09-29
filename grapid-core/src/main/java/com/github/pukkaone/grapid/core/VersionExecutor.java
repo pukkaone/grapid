@@ -28,13 +28,13 @@ public abstract class VersionExecutor {
    *
    * @return wiring
    */
-  public RuntimeWiring getRuntimeWiring() {
+  public RuntimeWiring.Builder getRuntimeWiring() {
     var builder = RuntimeWiring.newRuntimeWiring();
     for (var scalarType : CustomGraphQLScalarTypes.INSTANCE.getScalarTypes()) {
       builder.scalar(scalarType);
     }
 
     addTypes(builder);
-    return builder.build();
+    return builder;
   }
 }

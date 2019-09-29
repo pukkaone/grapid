@@ -36,3 +36,12 @@ h| Non-null scalar
 
 The GraphQL list type is translated to Java type
 https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html[java.util.List].
+
+
+=== Validation Directives
+
+Custom GraphQL directives can be applied to field arguments and input fields to check they have
+allowable values.
+The
+https://github.com/graphql-java/graphql-java-extended-validation#the-supplied-directive-constraints[graphql-java-extended-validation project]
+supplies the validation directives.
