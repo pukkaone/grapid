@@ -6,7 +6,7 @@ ext {
 
 dependencies {
   implementation project(':grapid-compiler')
-  implementation "org.apache.maven:maven-plugin-api:${mavenVersion}"
+  compileOnly "org.apache.maven:maven-plugin-api:${mavenVersion}"
   compileOnly "org.apache.maven.plugin-tools:maven-plugin-annotations:${mavenVersion}"
   implementation 'org.apache.maven.shared:file-management:3.0.0'
 }
