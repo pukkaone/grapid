@@ -100,8 +100,8 @@ For more details, see the https://pukkaone.github.io/grapid/documentation/[Getti
 
 == Interface Stability
 
-Version 0.x.x interfaces are unstable::
-  Releases within major version 0 may have incompatible changes.
+Major version zero (0.x.x) is for initial development. Anything may change at any time. The public
+API should not be considered stable.
 
 
 == Building
