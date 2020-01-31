@@ -50,7 +50,7 @@ subprojects {
   sourceCompatibility = JavaVersion.VERSION_11
 
   checkstyle {
-    toolVersion = '8.24'
+    toolVersion = '8.29'
   }
 
   test {

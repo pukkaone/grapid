@@ -264,10 +264,8 @@ with modifications for this organization's coding convention.
         <module name="JavadocMethod">
             <property name="scope" value="protected"/>
             <property name="allowMissingParamTags" value="true"/>
-            <property name="allowMissingThrowsTags" value="true"/>
             <property name="allowMissingReturnTag" value="true"/>
             <property name="allowedAnnotations" value="Override, Test"/>
-            <property name="allowThrowsTagsForSubclasses" value="true"/>
         </module>
         <module name="MissingJavadocMethod">
             <property name="scope" value="protected"/>
