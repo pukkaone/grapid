@@ -32,9 +32,9 @@ subprojects {
   }
 
   ext {
-    lombokVersion = '1.18.10'
-    springBootVersion = '2.2.1.RELEASE'
-    springFrameworkVersion = '5.2.1.RELEASE'
+    lombokVersion = '1.18.12'
+    springBootVersion = '2.2.4.RELEASE'
+    springFrameworkVersion = '5.2.3.RELEASE'
 
     isUploadArchivesEnabled =
         project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
