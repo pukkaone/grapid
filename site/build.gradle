@@ -1,0 +1,27 @@
+plugins {
+  id 'com.github.node-gradle.node' version '2.2.4'
+}
+
+ext {
+  antoraCommand = file("${buildDir}/node_modules/.bin/antora")
+}
+
+node {
+  download = true
+  nodeModulesDir = file("${buildDir}/node_modules")
+}
+
+task antoraInstall(type: NpmTask) {
+  args = ['install', '@antora/cli', '@antora/site-generator-default']
+  description 'Installs Antora documentation site generator'
+  outputs.upToDateWhen { antoraCommand.exists() }
+}
+
+task site(type: NodeTask) {
+  script = antoraCommand
+  args = ["antora-playbook.yml"]
+  dependsOn antoraInstall
+  description 'Generates documentation site'
+  group 'Documentation'
+  workingDir = projectDir
+}

@@ -1,0 +1,35 @@
+= Grapid
+:page-layout: home
+
+Grapid is an opinionated, schema-first framework for implementing GraphQL servers in Java.
+While the framework prescribes where you put GraphQL schema definition files and Java classes, you
+only need to implement the business logic for your API.
+The framework generates the code to wire GraphQL requests to your business logic.
+
+
+== How It Works
+
+=== 1. Define GraphQL schema
+[source,graphql]
+----
+type Query {
+  greet(name: String!): String!
+}
+----
+
+=== 2. Write Java application code
+[source,java]
+----
+@Component
+public class QueryResolver {
+  public String greet(String name) {
+    return "Hello " + name;
+  }
+}
+----
+
+=== 3. Build and run
+[source,sh]
+----
+mvn spring-boot:run
+----

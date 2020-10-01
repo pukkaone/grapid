@@ -1,4 +1,4 @@
-== Getting Started Guide
+= Getting Started Guide
 
 This tutorial explains how to implement a GraphQL server in a Spring Boot application.
 
@@ -12,7 +12,7 @@ Prerequisites are:
 ====
 
 
-=== Query
+== Query
 
 Add this Spring Boot starter which auto-configures a GraphQL server accepting requests by HTTP.
 By default, the server URL path is `/graphql` relative to the context path.
@@ -163,7 +163,7 @@ Run the application. In https://github.com/prisma/graphql-playground[GraphQL Pla
 connect to `http://localhost:8080/graphql/v2018_12_31` to send a GraphQL query to the server.
 
 
-=== Mutation
+== Mutation
 
 Add a mutation to the GraphQL schema.
 
@@ -231,7 +231,7 @@ public class MutationResolver {
     root object type Mutation.
 
 
-=== Field
+== Field
 
 In the GraphQL conceptual model, a field is a function which yields a value.
 This GraphQL server implementation calls these functions _resolvers_.
@@ -282,7 +282,7 @@ Add the method to be invoked to the QueryResolver class.
 ----
 
 
-=== Modularize GraphQL Schema
+== Modularize GraphQL Schema
 
 As the GraphQL schema grows more complex, you will want to organize the types and operations into
 multiple schema definition files.
@@ -361,7 +361,7 @@ extend type Query @resolve(class: "BookResolver") {
 ----
 
 
-=== API Versioning
+== API Versioning
 
 Ideally, you want your server to implement a single API version which stays backward compatible.
 In general, these guidelines help you avoid making breaking changes to your API:
@@ -382,7 +382,7 @@ For example, version `v2` is older than `v11`, but they would be sorted in the o
 compared lexicographically.
 
 
-==== Object Type Change
+=== Object Type Change
 
 For example, let's add a new API version, v2019_01_01, which introduces an incompatible change.
 The new API version moves the field price from object type Book to a nested object.
@@ -439,7 +439,7 @@ public class BookPriceChange
 You must also change the resolver classes to use the Java classes generated from new API version.
 
 
-==== Input Type Change
+=== Input Type Change
 
 Change the input type BookInput by moving the field price to a nested input.
 
@@ -490,7 +490,7 @@ public class BookInputPriceChange
 ----
 
 
-==== Enum Type Change
+=== Enum Type Change
 
 Suppose the previous API version defines an enum type.
 
@@ -543,7 +543,7 @@ public class MealSecondBreakfastChange
 ----
 
 
-==== Side Effect
+=== Side Effect
 
 Sometimes a new API version introduces a change in the application's behavior.
 The application must execute different logic depending on the API version of the request being
@@ -558,7 +558,7 @@ Inject a RequestVersion instance and the change instance.
 private RequestVersion requestVersion;
 
 @Autowired
-private MealSecondBreakChange mealSecondBreakfastChange;
+private MealSecondBreakfastChange mealSecondBreakfastChange;
 ----
 
 The application code checks if the change is active for the current request being processed.

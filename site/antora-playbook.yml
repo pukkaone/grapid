@@ -1,0 +1,23 @@
+site:
+  title: Grapid
+  url: https://pukkaone.github.io/grapid
+  start_page: documentation::home.adoc
+  keys:
+    google_analytics: UA-7747045-3
+content:
+  sources:
+  - url: ..
+    branches: HEAD
+    start_path: site/documentation
+    # If a content source is a local content repository, then the environment variable CI
+    # must be set for the default UI to apply edit_url.
+    # https://docs.antora.org/antora/2.2/whats-new/#customizable-edit-url
+    edit_url: 'https://github.com/pukkaone/grapid/blob/master/{path}'
+ui:
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable
+    snapshot: true
+  supplemental_files: supplemental-ui
+asciidoc:
+  attributes:
+    revnumber: '0.5.0'

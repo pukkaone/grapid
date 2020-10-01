@@ -1,17 +1,6 @@
-= Documentation
-:revnumber: 0.3.0
-:toc: macro
-:toclevels: 2
-
-*Version {revnumber}*
+= Introduction
 
 Grapid is an opinionated, schema-first framework for implementing GraphQL servers in Java.
 While the framework prescribes where you put GraphQL schema definition files and Java classes, you
 only need to implement the business logic for your API.
 The framework generates the code to wire GraphQL requests to your business logic.
-
-toc::[]
-
-include::documentation/getting-started.adoc[]
-
-include::documentation/reference.adoc[]

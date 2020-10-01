@@ -1,7 +1,7 @@
-== Reference
+= Reference
 
 
-=== Scalar Types
+== Scalar Types
 
 The framework supports the standard GraphQL scalars and some custom scalars.
 
@@ -32,13 +32,13 @@ h| Non-null scalar
 |===
 
 
-=== List Type
+== List Type
 
 The GraphQL list type is translated to Java type
 https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html[java.util.List].
 
 
-=== Validation Directives
+== Validation Directives
 
 Custom GraphQL directives can be applied to field arguments and input fields to check they have
 allowable values.
