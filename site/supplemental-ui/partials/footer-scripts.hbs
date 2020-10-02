@@ -1,0 +1,11 @@
+<script src="{{{uiRootPath}}}/js/site.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js"></script>
+<script src="{{{uiRootPath}}}/js/highlightjs-graphql.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function (event) {
+    hljs.registerLanguage('graphql', window.hljsDefineGraphQL);
+    document.querySelectorAll('pre code.hljs').forEach(function (block) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>

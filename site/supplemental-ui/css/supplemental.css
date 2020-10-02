@@ -1,3 +1,7 @@
+.doc {
+  hyphens: manual;
+}
+
 .home article {
   margin: 0 auto;
 }
