@@ -1,3 +1,7 @@
+plugins {
+  id 'organization.library-convention'
+}
+
 description = 'Translates GraphQL schema to Java source code'
 
 dependencies {

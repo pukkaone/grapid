@@ -1,3 +1,7 @@
+plugins {
+  id 'organization.library-convention'
+}
+
 description = 'Maven plugin that translates GraphQL schema to Java source code'
 
 ext {
