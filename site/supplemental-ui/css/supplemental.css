@@ -1,5 +1,16 @@
+body {
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+}
+
+code, kbd, pre {
+  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+  font-size: 85%;
+}
+
 .doc {
+  font-size: 16px;
   hyphens: manual;
+  line-height: 1.5;
 }
 
 .home article {
