@@ -1,18 +1,3 @@
-rootProject.version = readVersion()
-
-// Gets version from Git tag.
-def readVersion() {
-  def output = new StringBuilder()
-  def error = new StringBuilder()
-  'git describe --dirty'.execute().waitForProcessOutput(output, error)
-  def version = output.toString().trim()
-  if (version.isEmpty()) {
-    println error
-    version = 'UNKNOWN'
-  } else if (version.endsWith('-dirty') || version ==~ /.*-\d+-g[0-9a-f]+/) {
-    // Assign version for work in progress.
-    version = '999-SNAPSHOT'
-  }
-  println "Version ${version}"
-  return version
+plugins {
+  id 'organization.project-version'
 }

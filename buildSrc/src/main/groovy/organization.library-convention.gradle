@@ -6,7 +6,6 @@ plugins {
 }
 
 group = 'com.github.pukkaone'
-version = rootProject.version
 
 repositories {
   mavenLocal()
