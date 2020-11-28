@@ -7,9 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
     - name: Fetch all history for all tags and branches
       run: git fetch --prune --unshallow
+
     - uses: actions/setup-java@v1
       with:
         java-version: 11
-    - run: gradle install check
+
+    - run: gradle publishToMavenLocal check

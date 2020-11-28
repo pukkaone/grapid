@@ -116,5 +116,5 @@ Prerequisites are:
 To compile the project and run integration tests:
 
 ----
-gradle install check
+gradle publishToMavenLocal check
 ----

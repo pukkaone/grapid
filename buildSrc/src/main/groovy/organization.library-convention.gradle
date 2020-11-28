@@ -1,7 +1,7 @@
 plugins {
   id 'checkstyle'
   id 'java-library'
-  id 'maven'
+  id 'maven-publish'
   id 'signing'
 }
 
@@ -16,9 +16,6 @@ ext {
   lombokVersion = '1.18.12'
   springBootVersion = '2.3.4.RELEASE'
   springFrameworkVersion = '5.2.9.RELEASE'
-
-  isUploadArchivesEnabled =
-      project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
 }
 
 dependencies {
@@ -29,6 +26,11 @@ dependencies {
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
+
+java {
+  withJavadocJar()
+  withSourcesJar()
+}
 
 checkstyle {
   toolVersion = '8.29'
@@ -46,68 +48,52 @@ jar {
   }
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-  archiveClassifier = 'javadoc'
-  from javadoc
-}
-
-task sourcesJar(type: Jar) {
-  archiveClassifier = 'sources'
-  from sourceSets.main.allSource
-}
-
-artifacts {
-  archives javadocJar
-  archives sourcesJar
-}
-
-signing {
-  required { isUploadArchivesEnabled }
-  sign configurations.archives
-}
-
-uploadArchives {
-  repositories {
-    mavenDeployer {
-      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-      repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-        if (isUploadArchivesEnabled) {
-          authentication(userName: sonatypeUsername, password: sonatypePassword)
+publishing {
+  publications {
+    library(MavenPublication) {
+      from components.java
+      pom {
+        name = project.name
+        afterEvaluate {
+          description = project.description
         }
-      }
-
-      pom.project {
-        name project.name
-        url 'https://github.com/pukkaone/grapid'
+        url = 'https://github.com/pukkaone/grapid'
 
         licenses {
           license {
-            name 'Apache License, Version 2.0'
-            url 'https://www.apache.org/licenses/LICENSE-2.0'
-            distribution 'repo'
+            name = 'Apache License, Version 2.0'
+            url = 'https://www.apache.org/licenses/LICENSE-2.0'
           }
         }
 
         developers {
           developer {
-            id 'pukkaone'
-            name 'Chin Huang'
+            id = 'pukkaone'
+            name = 'Chin Huang'
           }
         }
 
         scm {
-          connection 'scm:git:git@github.com:pukkaone/grapid.git'
-          developerConnection 'scm:git:git@github.com:pukkaone/grapid.git'
-          url 'https://github.com/pukkaone/grapid'
+          connection = 'scm:git:git@github.com:pukkaone/grapid.git'
+          developerConnection = 'scm:git:git@github.com:pukkaone/grapid.git'
+          url = 'https://github.com/pukkaone/grapid'
         }
+      }
+    }
+  }
+
+  repositories {
+    maven {
+      url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+      credentials {
+        username = project.hasProperty('sonatypeUsername') ? project.sonatypeUsername : 'UNKNOWN'
+        password = project.hasProperty('sonatypePassword') ? project.sonatypePassword : 'UNKNOWN'
       }
     }
   }
 }
 
-afterEvaluate { project ->
-  uploadArchives.repositories.mavenDeployer.pom.project {
-    description project.description
-  }
+signing {
+  required { project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword') }
+  sign publishing.publications.library
 }
