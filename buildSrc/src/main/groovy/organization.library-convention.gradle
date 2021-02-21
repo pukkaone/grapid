@@ -13,14 +13,14 @@ repositories {
 }
 
 ext {
-  lombokVersion = '1.18.12'
-  springBootVersion = '2.3.4.RELEASE'
-  springFrameworkVersion = '5.2.9.RELEASE'
+  lombokVersion = '1.18.18'
+  springBootVersion = '2.3.9.RELEASE'
+  springFrameworkVersion = '5.2.13.RELEASE'
 }
 
 dependencies {
-  testImplementation 'org.assertj:assertj-core:3.13.2'
-  testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
+  testImplementation 'org.assertj:assertj-core:3.16.1'
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.6.3'
   annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
   compileOnly "org.projectlombok:lombok:${lombokVersion}"
 }
@@ -86,14 +86,14 @@ publishing {
     maven {
       url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
       credentials {
-        username = project.hasProperty('sonatypeUsername') ? project.sonatypeUsername : 'UNKNOWN'
-        password = project.hasProperty('sonatypePassword') ? project.sonatypePassword : 'UNKNOWN'
+        username = findProperty('sonatypeUsername') ?: 'UNKNOWN'
+        password = findProperty('sonatypePassword') ?: 'UNKNOWN'
       }
     }
   }
 }
 
 signing {
-  required { project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword') }
+  required { hasProperty('sonatypeUsername') && hasProperty('sonatypePassword') }
   sign publishing.publications.library
 }

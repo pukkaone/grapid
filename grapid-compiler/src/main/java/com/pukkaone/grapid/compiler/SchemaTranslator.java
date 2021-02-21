@@ -251,27 +251,27 @@ public class SchemaTranslator {
   }
 
   private Stream<CodeBlock> generateDirectiveArguments(FieldDefinition field) {
-    List<CodeBlock> arguments = new ArrayList<>();
+    var arguments = new ArrayList<CodeBlock>();
 
-    var directive = field.getDirective(ArgumentDirective.NAME);
-    if (directive != null) {
-      var nameArgument = directive.getArgument("name");
-      var valueArgument = directive.getArgument("value");
-      if (nameArgument != null && valueArgument != null) {
-        var value = ((StringValue) valueArgument.getValue()).getValue();
-        arguments.add(CodeBlock.of(value));
-      }
+    field.getDirectives(ArgumentDirective.NAME)
+        .forEach(directive -> {
+          var nameArgument = directive.getArgument("name");
+          var valueArgument = directive.getArgument("value");
+          if (nameArgument != null && valueArgument != null) {
+            var value = ((StringValue) valueArgument.getValue()).getValue();
+            arguments.add(CodeBlock.of(value));
+          }
 
-      var moreArgument = directive.getArgument("more");
-      if (moreArgument != null) {
-        ((ArrayValue) moreArgument.getValue()).getValues()
-            .stream()
-            .flatMap(element -> ((ObjectValue) element).getObjectFields().stream())
-            .filter(objectField -> objectField.getName().equals("value"))
-            .map(objectField -> ((StringValue) objectField.getValue()).getValue())
-            .forEach(value -> arguments.add(CodeBlock.of(value)));
-      }
-    }
+          var moreArgument = directive.getArgument("more");
+          if (moreArgument != null) {
+            ((ArrayValue) moreArgument.getValue()).getValues()
+                .stream()
+                .flatMap(element -> ((ObjectValue) element).getObjectFields().stream())
+                .filter(objectField -> objectField.getName().equals("value"))
+                .map(objectField -> ((StringValue) objectField.getValue()).getValue())
+                .forEach(value -> arguments.add(CodeBlock.of(value)));
+          }
+        });
 
     return arguments.stream();
   }

@@ -1,7 +1,7 @@
 name: documentation
 version: master
 title: Grapid
-display_version: '0.5.0'
+display_version: '0.6.0'
 nav:
 - modules/guide/nav.adoc
 - modules/reference/nav.adoc

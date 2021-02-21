@@ -12,7 +12,7 @@ public final class ResolveDirective {
   public static final String NAME = "resolve";
 
   public static final String DEFINITION =
-      "directive @resolve(class: String) on FIELD_DEFINITION | OBJECT";
+      "directive @resolve(class: String) repeatable on FIELD_DEFINITION | OBJECT";
 
   /**
    * If the object type definition has the directive, then returns the Java class specified in the
@@ -25,12 +25,14 @@ public final class ResolveDirective {
    * @return Java class
    */
   public static String getClass(ObjectTypeDefinition objectType, String defaultClass) {
-    var directive = objectType.getDirective(ResolveDirective.NAME);
-    if (directive == null) {
+    var directive = objectType.getDirectives(ResolveDirective.NAME)
+        .stream()
+        .findFirst();
+    if (directive.isEmpty()) {
       return defaultClass;
     }
 
-    var type = directive.getArgument("class");
+    var type = directive.get().getArgument("class");
     if (type == null) {
       return defaultClass;
     }

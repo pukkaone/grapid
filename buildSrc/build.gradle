@@ -12,7 +12,7 @@ dependencies {
 
 gradlePlugin {
   plugins {
-    projectVersionPlugin {
+    projectVersion {
       id = 'organization.project-version'
       implementationClass = 'organization.ProjectVersionPlugin'
     }
