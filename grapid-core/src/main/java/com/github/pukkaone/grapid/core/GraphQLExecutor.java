@@ -7,7 +7,6 @@ import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
-import graphql.validation.constraints.DirectiveConstraints;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
@@ -57,9 +56,6 @@ public class GraphQLExecutor {
     }
 
     var schemaParser = new SchemaParser();
-    var validationConstraints = DirectiveConstraints.newDirectiveConstraints()
-        .build();
-    typeDefinitionRegistry.merge(schemaParser.parse(validationConstraints.getDirectivesSDL()));
     typeDefinitionRegistry.merge(schemaParser.parse(ArgumentDirective.DEFINITION));
     typeDefinitionRegistry.merge(schemaParser.parse(ResolveDirective.DEFINITION));
 
