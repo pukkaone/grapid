@@ -9,7 +9,7 @@ group = 'com.github.pukkaone'
 
 repositories {
   mavenLocal()
-  jcenter()
+  mavenCentral()
 }
 
 ext {
@@ -33,7 +33,7 @@ java {
 }
 
 checkstyle {
-  toolVersion = '8.29'
+  toolVersion = '8.41'
 }
 
 test {
