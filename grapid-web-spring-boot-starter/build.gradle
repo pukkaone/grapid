@@ -6,7 +6,7 @@ description = 'GraphQL synchronous server Spring Boot starter'
 
 dependencies {
   api project(':grapid-core')
-  api "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+  api 'org.springframework.boot:spring-boot-starter-web'
 }
 
 task integrationTest(type: Exec) {

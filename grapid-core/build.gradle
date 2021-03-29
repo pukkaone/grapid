@@ -9,12 +9,12 @@ ext {
 }
 
 dependencies {
-  implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.2'
+  implementation 'com.fasterxml.jackson.core:jackson-databind'
   annotationProcessor "com.google.auto.service:auto-service:${autoServiceVersion}"
   compileOnly "com.google.auto.service:auto-service:${autoServiceVersion}"
   api 'com.graphql-java:graphql-java:16.2'
-  api 'javax.annotation:javax.annotation-api:1.3.2'
+  api 'javax.annotation:javax.annotation-api'
   api 'javax.inject:javax.inject:1'
-  implementation "org.springframework:spring-context:${springFrameworkVersion}"
-  implementation "org.springframework:spring-web:${springFrameworkVersion}"
+  implementation 'org.springframework:spring-context'
+  implementation 'org.springframework:spring-web'
 }
