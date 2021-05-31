@@ -33,7 +33,7 @@ java {
 }
 
 checkstyle {
-  toolVersion = '8.42'
+  toolVersion = '8.43'
 }
 
 test {
