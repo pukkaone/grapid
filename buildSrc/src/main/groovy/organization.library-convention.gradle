@@ -13,7 +13,7 @@ repositories {
 }
 
 ext {
-  springBootVersion = '2.5.1'
+  springBootVersion = '2.5.4'
 }
 
 dependencies {
@@ -33,7 +33,7 @@ java {
 }
 
 checkstyle {
-  toolVersion = '8.43'
+  toolVersion = '8.45.1'
 }
 
 test {
