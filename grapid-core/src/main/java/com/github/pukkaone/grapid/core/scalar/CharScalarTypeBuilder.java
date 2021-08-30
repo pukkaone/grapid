@@ -1,8 +1,8 @@
 package com.github.pukkaone.grapid.core.scalar;
 
 import com.google.auto.service.AutoService;
-import graphql.Scalars;
 import graphql.language.ScalarTypeDefinition;
+import graphql.scalars.ExtendedScalars;
 import graphql.schema.GraphQLScalarType;
 
 /**
@@ -13,9 +13,9 @@ public class CharScalarTypeBuilder implements GraphQLScalarTypeBuilder {
 
   @Override
   public GraphQLScalarType build() {
-    return GraphQLScalarType.newScalar(Scalars.GraphQLChar)
+    return GraphQLScalarType.newScalar(ExtendedScalars.GraphQLChar)
         .definition(ScalarTypeDefinition.newScalarTypeDefinition()
-            .name(Scalars.GraphQLChar.getName())
+            .name(ExtendedScalars.GraphQLChar.getName())
             .build())
         .build();
   }
