@@ -5,7 +5,7 @@ plugins {
 description = 'GraphQL server core library'
 
 ext {
-  autoServiceVersion = '1.0'
+  autoServiceVersion = '1.0.1'
 }
 
 dependencies {
