@@ -32,8 +32,12 @@ java {
   withSourcesJar()
 }
 
+javadoc {
+  options.addStringOption('Xdoclint:none', '-quiet')
+}
+
 checkstyle {
-  toolVersion = '8.45.1'
+  toolVersion = '9.2'
 }
 
 test {
