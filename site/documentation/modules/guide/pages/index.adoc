@@ -6,9 +6,9 @@ This tutorial explains how to implement a GraphQL server in a Spring Boot applic
 ====
 Prerequisites are:
 
-  - Java 11
+  - Java 17
   - Maven
-  - Maven project building a Spring Boot 2.3 application
+  - Maven project building a Spring Boot 2.7 application
 ====
 
 

@@ -110,7 +110,7 @@ API should not be considered stable.
 
 Prerequisites are:
 
-  - Java 11
+  - Java 17
   - Gradle
 
 To compile the project and run integration tests:
