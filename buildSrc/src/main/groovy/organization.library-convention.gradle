@@ -13,7 +13,7 @@ repositories {
 }
 
 ext {
-  springBootVersion = '2.5.4'
+  springBootVersion = '2.7.0'
 }
 
 dependencies {
@@ -25,7 +25,7 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-sourceCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_17
 
 java {
   withJavadocJar()
