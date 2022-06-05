@@ -87,9 +87,9 @@ The compiler generates the code for this version to Java package `com.example.gr
 
 Add this GraphQL schema definition file in the version directory.
 
-NOTE: By convention, GraphQL schema definition file names end with the extension `.graphql`.
+NOTE: By convention, GraphQL schema definition file names end with the extension `.graphqls`.
 
-.schema.graphql
+.schema.graphqls
 [source,graphql]
 ----
 type Author {
@@ -167,7 +167,7 @@ connect to `http://localhost:8080/graphql/v2018_12_31` to send a GraphQL query t
 
 Add a mutation to the GraphQL schema.
 
-.schema.graphql
+.schema.graphqls
 [source,graphql]
 ----
 type Author {
@@ -294,13 +294,13 @@ in the MutationResolver class and QueryResolver class may become unwieldly.
 Instead of making these two classes responsible for all your business logic, you can
 organize the methods into other Java resolver classes.
 
-Delete the schema.graphql file.
+Delete the schema.graphqls file.
 Other files will replace it.
 
 Define the GraphQL root object type Mutation with no fields.
 You're going to extend this type, and type extensions are only allowed on already defined types.
 
-.Mutation.graphql
+.Mutation.graphqls
 [source,graphql]
 ----
 type Mutation {
@@ -309,7 +309,7 @@ type Mutation {
 
 Define the GraphQL root object type Query with no fields.
 
-.Query.graphql
+.Query.graphqls
 [source,graphql]
 ----
 type Query {
@@ -321,7 +321,7 @@ A custom directive ties the fields defined in the object type extension to metho
 AuthorResolver.
 As an application developer, you must implement the AuthorResolver class.
 
-.Author.graphql
+.Author.graphqls
 [source,graphql]
 ----
 type Author {
@@ -337,7 +337,7 @@ extend type Query @resolve(class: "AuthorResolver") {
 Similarly extend Mutation and Query with book operations, and tie them to methods of Java class
 BookResolver.
 
-.Book.graphql
+.Book.graphqls
 [source,graphql]
 ----
 type Book {
@@ -392,7 +392,7 @@ Copy resources directory `src/main/resources/graphql/v2018_12_31/`
 to `src/main/resources/graphql/v2019_01_01/`.
 Change the Book definition in the new API version.
 
-.v2019_01_01/Book.graphql
+.v2019_01_01/Book.graphqls
 [source,graphql]
 ----
 type Offer {
@@ -443,7 +443,7 @@ You must also change the resolver classes to use the Java classes generated from
 
 Change the input type BookInput by moving the field price to a nested input.
 
-.v2019_01_01/Book.graphql
+.v2019_01_01/Book.graphqls
 [source,graphql]
 ----
 type OfferInput {

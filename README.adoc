@@ -51,9 +51,9 @@ By convention, GraphQL schema definition files are located under a resources dir
 `src/main/resources/graphql/_version_/` where _version_ identifies an API version.  Create the
 resources directory `src/main/resources/graphql/v2018_12_31/`.  Add this GraphQL schema definition
 file in the directory.  By convention, GraphQL schema definition file names end with the extension
-`.graphql`.
+`.graphqls`.
 
-.Author.graphql
+.Author.graphqls
 [source,graphql]
 ----
 type Author {

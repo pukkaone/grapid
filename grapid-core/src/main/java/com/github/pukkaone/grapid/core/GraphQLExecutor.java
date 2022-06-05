@@ -45,7 +45,7 @@ public class GraphQLExecutor {
    *     specification for wiring GraphQL types to data fetchers
    */
   public GraphQLExecutor(Version version, RuntimeWiring runtimeWiring) {
-    this("classpath*:/graphql/" + version + "/**/*.graphql", runtimeWiring);
+    this("classpath*:/graphql/" + version + "/**/*.graphqls", runtimeWiring);
   }
 
   private TypeDefinitionRegistry parseSchemaFiles(String schemaFilePattern) {

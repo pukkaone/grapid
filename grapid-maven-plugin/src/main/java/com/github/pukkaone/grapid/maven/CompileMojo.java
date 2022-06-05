@@ -41,7 +41,7 @@ public class CompileMojo extends AbstractMojo {
   /**
    * Ant-style patterns to match GraphQL schema file names under the source directory.
    */
-  @Parameter(defaultValue = "**/*.graphql")
+  @Parameter(defaultValue = "**/*.graphqls")
   private List<String> includes;
 
   /**

@@ -39,7 +39,7 @@ public class VersionController {
   public VersionController(ObjectMapper objectMapper, VersionService versionService) {
     this.objectMapper = objectMapper;
     this.executor = new GraphQLExecutor(
-        "classpath*:/grapid/version/Version.graphql", getRuntimeWiring(versionService));
+        "classpath*:/grapid/version/Version.graphqls", getRuntimeWiring(versionService));
   }
 
   private static RuntimeWiring getRuntimeWiring(VersionService versionService) {
