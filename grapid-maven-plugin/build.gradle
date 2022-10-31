@@ -1,3 +1,5 @@
+import groovy.xml.XmlParser
+
 plugins {
   id 'organization.library-convention'
 }
@@ -24,12 +26,41 @@ publishing {
       pom {
         packaging = 'maven-plugin'
         withXml {
-          asNode()
-              .appendNode('build')
-                  .appendNode('outputDirectory', 'classes/java/main')
           asNode().dependencies.'*'
               .findAll() { it.groupId.text() == 'org.apache.maven' && it.scope.text() == 'runtime' }
               .each { it.scope*.value = 'provided' }
+          asNode()
+              .append(new XmlParser().parseText("""
+  <build>
+    <outputDirectory>classes/java/main</outputDirectory>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-plugin-plugin</artifactId>
+          <version>${mavenPluginVersion}</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.reporting</groupId>
+              <artifactId>maven-reporting-impl</artifactId>
+              <version>3.0.0</version>
+              <!--
+              Do not download vulnerable JAR file so security scan does not find it.
+              https://nvd.nist.gov/vuln/detail/CVE-2016-1181
+              -->
+              <exclusions>
+                <exclusion>
+                  <groupId>org.apache.struts</groupId>
+                  <artifactId>struts-core</artifactId>
+                </exclusion>
+              </exclusions>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+  """))
         }
       }
     }
@@ -45,7 +76,7 @@ model {
 task generatePluginDescriptor(type: Exec) {
   dependsOn generatePomFileForLibraryPublication
   workingDir buildDir
-  commandLine "${rootDir}/mvnw", '--batch-mode', '--errors', "org.apache.maven.plugins:maven-plugin-plugin:${mavenPluginVersion}:descriptor"
+  commandLine "${rootDir}/mvnw", '--batch-mode', '--errors', 'plugin:descriptor'
 }
 
 jar.dependsOn(generatePluginDescriptor)
