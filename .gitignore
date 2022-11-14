@@ -1,6 +1,7 @@
+!gradle/wrapper/gradle-wrapper.jar
+.DS_Store
 .gradle/
 target/
-!gradle/wrapper/gradle-wrapper.jar
 
 # Spring Tool Suite
 .apt_generated

@@ -8,7 +8,7 @@ description = 'Maven plugin that translates GraphQL schema to Java source code'
 
 ext {
   mavenVersion = '3.8.6'
-  mavenPluginVersion = '3.6.4'
+  mavenPluginVersion = '3.7.0'
 }
 
 dependencies {
@@ -26,6 +26,7 @@ publishing {
       pom {
         packaging = 'maven-plugin'
         withXml {
+          // Gradle generated dependencies with runtime scope but Maven wants provided scope.
           asNode().dependencies.'*'
               .findAll() { it.groupId.text() == 'org.apache.maven' && it.scope.text() == 'runtime' }
               .each { it.scope*.value = 'provided' }
