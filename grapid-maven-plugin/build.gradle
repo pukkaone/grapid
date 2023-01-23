@@ -8,7 +8,7 @@ description = 'Maven plugin that translates GraphQL schema to Java source code'
 
 ext {
   mavenVersion = '3.8.7'
-  mavenPluginVersion = '3.7.0'
+  mavenPluginVersion = '3.7.1'
 }
 
 dependencies {
