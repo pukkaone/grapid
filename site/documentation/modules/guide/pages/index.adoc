@@ -22,7 +22,7 @@ By default, the server URL path is `/graphql` relative to the context path.
 <dependency>
   <groupId>com.github.pukkaone</groupId>
   <artifactId>grapid-web-spring-boot-starter</artifactId>
-  <version>{revnumber}</version>
+  <version>{grapidVersion}</version>
 </dependency>
 ----
 
@@ -34,7 +34,7 @@ source files.
 <plugin>
   <groupId>com.github.pukkaone</groupId>
   <artifactId>grapid-maven-plugin</artifactId>
-  <version>{revnumber}</version>
+  <version>{grapidVersion}</version>
   <configuration>
     <packagePrefix>com.example.graphql</packagePrefix>
   </configuration>

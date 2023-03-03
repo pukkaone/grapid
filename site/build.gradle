@@ -1,27 +1,24 @@
 plugins {
-  id 'com.github.node-gradle.node' version '2.2.4'
+  id 'org.antora' version '1.0.0'
+  id 'organization.library-convention'
 }
 
-ext {
-  antoraCommand = file("${buildDir}/node_modules/.bin/antora")
+processResources {
+  with copySpec {
+    from 'antora-playbook.yml'
+    expand project.properties
+  }
 }
 
-node {
-  download = true
-  nodeModulesDir = file("${buildDir}/node_modules")
+antora {
+  options = [
+      attributes: [
+          grapidVersion: project.version
+      ],
+      clean: true,
+      stacktrace: true
+  ]
+  playbook = "${buildDir}/resources/main/antora-playbook.yml"
 }
 
-task antoraInstall(type: NpmTask) {
-  args = ['install', '@antora/cli', '@antora/site-generator-default']
-  description 'Installs Antora documentation site generator'
-  outputs.upToDateWhen { antoraCommand.exists() }
-}
-
-task site(type: NodeTask) {
-  script = antoraCommand
-  args = ["antora-playbook.yml"]
-  dependsOn antoraInstall
-  description 'Generates documentation site'
-  group 'Documentation'
-  workingDir = projectDir
-}
+tasks.antora.dependsOn processResources

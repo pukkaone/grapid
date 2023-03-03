@@ -1,1 +1,2 @@
-static_files: [.nojekyll]
+static_files:
+- .nojekyll
