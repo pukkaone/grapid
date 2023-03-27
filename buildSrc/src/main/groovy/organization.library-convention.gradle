@@ -37,7 +37,7 @@ javadoc {
 }
 
 checkstyle {
-  toolVersion = '10.9.2'
+  toolVersion = '10.9.3'
 }
 
 test {
